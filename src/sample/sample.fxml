@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" stylesheets="@stylesheet.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+   <left>
+      <VBox minWidth="150.0" prefHeight="600.0" prefWidth="177.0" style="-fx-background-color: #263538;" BorderPane.alignment="CENTER">
+         <children>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #455A64;">
+               <children>
+                  <Label text="CRM" textAlignment="CENTER" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="47.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" onMouseClicked="#reportenSceneAction" prefWidth="200.0" styleClass="btns">
+               <children>
+                  <FontAwesomeIcon glyphStyle="-fx-fill:#FFFFFF" iconName="DASHBOARD" size="1.5em" text="">
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </FontAwesomeIcon>
+                  <Label text="Reportes" textFill="WHITE">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding>
+                  </Label>
+               </children>
+               <padding>
+                  <Insets bottom="10.0" left="30.0" top="10.0" />
+               </padding>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="110.0" onMouseClicked="#verClientesSceneAction" prefWidth="200.0" styleClass="btns">
+               <children>
+                  <FontAwesomeIcon glyphStyle="-fx-fill:#FFFFFF" iconName="USER" size="1.5em">
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </FontAwesomeIcon>
+                  <Label text="Ver cliente" textFill="WHITE">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding>
+                  </Label>
+               </children>
+               <padding>
+                  <Insets bottom="10.0" left="30.0" top="10.0" />
+               </padding>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+            </HBox>
+            <HBox alignment="CENTER" layoutX="10.0" layoutY="160.0" onMouseClicked="#agregarClienteSceneAction" prefWidth="200.0" styleClass="btns">
+               <children>
+                  <FontAwesomeIcon glyphStyle="-fx-fill:#FFFFFF" iconName="PLUS" size="1.5em">
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </FontAwesomeIcon>
+                  <Label text="Agregar cliente" textFill="WHITE" wrapText="true">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding>
+                  </Label>
+               </children>
+               <padding>
+                  <Insets bottom="10.0" left="30.0" top="10.0" />
+               </padding>
+            </HBox>
+            <HBox alignment="CENTER" layoutX="10.0" layoutY="210.0" onMouseClicked="#modificarCatalogoSceneAction" prefWidth="200.0" styleClass="btns">
+               <children>
+                  <FontAwesomeIcon glyphStyle="-fx-fill:#FFFFFF" iconName="LIST" size="1.5em">
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </FontAwesomeIcon>
+                  <Label text="Modificar catalogo" textFill="WHITE" wrapText="true">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding>
+                  </Label>
+               </children>
+               <padding>
+                  <Insets bottom="10.0" left="30.0" top="10.0" />
+               </padding>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="110.0" onMouseClicked="#verDataAction" prefWidth="200.0" styleClass="btns">
+               <children>
+                  <FontAwesomeIcon glyphStyle="-fx-fill:#FFFFFF" iconName="TABLE" size="1.5em">
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </FontAwesomeIcon>
+                  <Label text="Ver data" textFill="WHITE">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding>
+                  </Label>
+               </children>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <padding>
+                  <Insets bottom="10.0" left="30.0" top="10.0" />
+               </padding>
+            </HBox>
+         </children>
+      </VBox>
+   </left>
+   <center>
+      <VBox prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: lightgray;" BorderPane.alignment="CENTER">
+         <children>
+            <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Label fx:id="paneHeader" text="String" textFill="#979797">
+                     <font>
+                        <Font name="System Bold" size="29.0" />
+                     </font>
+                  </Label>
+               </children>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <padding>
+                  <Insets left="20.0" />
+               </padding>
+            </HBox>
+            <AnchorPane fx:id="pane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: white;" VBox.vgrow="ALWAYS" />
+         </children>
+      </VBox>
+   </center>
+</BorderPane>
