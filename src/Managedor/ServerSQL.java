@@ -37,5 +37,15 @@ public class ServerSQL {
 
     }
 
+    public  void closeConnectionToServe  (){
+        try {
+            c.close();
+        }
+        catch (SQLException s){
+
+        }
+
+    }
+
 
 }
