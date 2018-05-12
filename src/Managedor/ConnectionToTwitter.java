@@ -24,10 +24,13 @@ public class ConnectionToTwitter {
 
         try {
 
-            List<Status> statuses = twitter.getHomeTimeline();
+//            List<Status> statuses = twitter.getUserTimeline("geektenango");
+            List<Status> statuses = twitter.getFavorites("geektenango");
+//            List<Status> statuses = twitter.getConfiguration ("geektenango");
+
 
             for (Status s : statuses){
-                System.out.println(s.getUser().getScreenName());
+                System.out.println("@" + s.getUser().getScreenName() + " - " + s.getText() );
             }
         }
         catch (Exception e){

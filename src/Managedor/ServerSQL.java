@@ -1,5 +1,6 @@
 package Managedor;
 import java.sql.*;
+import java.util.ArrayList;
 
 public class ServerSQL {
     private Credenciales credenciales = new Credenciales();
@@ -36,8 +37,31 @@ public class ServerSQL {
 
 
     }
+    //metodos para llenar los combobox
+    public ArrayList<String> getNamesFromCatalog(String catalogName){
+        ArrayList<String> result  = new ArrayList<>();
+        try {
+            Statement st = c.createStatement();
+            ResultSet rs = st.executeQuery("SELECT * FROM "+catalogName);
+            while (rs.next())
+            {
+                result.add(rs.getString(2));
+            }
+            rs.close();
+            st.close();
+        }
+        catch (SQLException e){
+            System.out.println("Error durante la ejecucion de query");
+        }
+        return result;
+    }
 
-    public  void closeConnectionToServe  (){
+    //#INSERT INTO cliente VALUES (1, 'Diego','Calderon','5/6/1996', null,'','', 12, 4, 2, 3, 16 , 150.85,false, 0,null)
+    public void insertCliente(String nombre, String Apellido, String fechaNacimiento, String twUser){
+
+    }
+
+    public  void closeConnectionToServer (){
         try {
             c.close();
         }
