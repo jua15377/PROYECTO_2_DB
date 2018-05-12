@@ -41,7 +41,7 @@ public class Controller implements Initializable{
         home.setLeftAnchor(home, 0.0);
         home.setBottomAnchor(home, 0.0);
         home.setRightAnchor(home, 0.0);
-        //
+
         setNode(home);
     }
 
