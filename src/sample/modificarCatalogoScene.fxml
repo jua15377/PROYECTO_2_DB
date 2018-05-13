@@ -23,17 +23,25 @@
                         <Font size="16.0" />
                      </font>
                   </Label>
-                  <ComboBox fx:id="cb_Catalogo" onAction="#catalogoListener" prefHeight="25.0" prefWidth="358.0" />
+                  <ComboBox fx:id="cb_Catalogo" onAction="#catalogoListener" prefHeight="37.0" prefWidth="358.0" />
+                  <Button fx:id="guardarButton" mnemonicParsing="false" onAction="#guardarButtonAction" text="Guardar cambios">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Button>
                </children>
                <padding>
                   <Insets bottom="10.0" left="30.0" top="10.0" />
                </padding>
             </HBox>
-            <TableView prefHeight="657.0" prefWidth="997.0">
+            <TableView fx:id="table" prefHeight="657.0" prefWidth="997.0">
               <columns>
                 <TableColumn prefWidth="75.0" text="C1" />
                 <TableColumn prefWidth="75.0" text="C2" />
               </columns>
+               <padding>
+                  <Insets left="20.0" right="20.0" />
+               </padding>
             </TableView>
          </children>
       </VBox>
