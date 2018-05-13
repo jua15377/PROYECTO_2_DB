@@ -1,7 +1,10 @@
 package sample;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -15,7 +18,6 @@ import java.io.File;
 import java.net.URL;
 import java.sql.Date;
 import java.util.*;
-
 import manejador.*;
 
 import javax.xml.crypto.Data;
@@ -51,6 +53,8 @@ public class agregarClienteController implements Initializable{
 
     @FXML
     ListView<HBox> fieldsList;
+
+    ObservableList<HBox> items = FXCollections.observableArrayList ();
 
     @FXML
     ToggleSwitch creditoSwitch;
@@ -177,7 +181,9 @@ public class agregarClienteController implements Initializable{
 
             String nombre = tfNombre.getText();
             String apeliido = tfApellido.getText();
+
             Date date = Date.valueOf(fechaNacimiento.getValue().toString());
+
             String twitterUser;
             if (tfTwitterUsername.getText().contains("@")){
                 twitterUser = tfTwitterUsername.getText().replace("@","");
@@ -218,6 +224,21 @@ public class agregarClienteController implements Initializable{
                  cantCredito = 0;
             }
             //aca se leeran multiples campos
+
+            items = fieldsList.getItems();
+            for (HBox h:items) {
+                VBox v = (VBox) h.getChildren().get(0);
+                Label label = (Label) v.getChildren().get(0);
+                String nombreCampo = label.getText();
+
+                //Obtiene el nombre del nuevo campo
+                nombreCampo = nombreCampo.replace(": ", "");
+                TextField textField = (TextField) h.getChildren().get(1);
+
+                //Obtiene el contenido del textfield
+                String contenidoCampo = textField.getText();
+
+            }
             if(!camposExtras.isEmpty()){
                 for (Map.Entry<String,String> s : camposExtras.entrySet() ){
 
@@ -257,8 +278,10 @@ public class agregarClienteController implements Initializable{
         fillcb_Ocupacion();
         fillcb_Sucursal();
         fillcb_Categoria();
-
-        Image img = new Image("file:default.png");
+        String path1 = System.getProperty("user.dir") + "/resources/default.png";
+        path1 = "file:"+ path1.replace("\\", "/");
+        System.out.println(path1);
+        Image img = new Image(path1);
         imagen.setImage(img);
     }
 }

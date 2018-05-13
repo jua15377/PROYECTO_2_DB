@@ -99,7 +99,16 @@ public class verClienteSceneController implements Initializable{
     @FXML
     void buscarButtonAction(){
         //hacer aqui lo que busca el usuario y setea los valores
-        scrollPaneFields.setVisible(true);
+        if(tfBuscarUsuario.getText().equals("")){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Busqueda cliente");
+            alert.setHeaderText(null);
+            alert.setContentText("Ooops, por favor ingresa el ID de un cliente!");
+            alert.showAndWait();
+        }else{
+            scrollPaneFields.setVisible(true);
+        }
+
     }
 
     //Boton "Modificar" que habilita que los textfields con los daros del usuario sean editables
@@ -129,6 +138,7 @@ public class verClienteSceneController implements Initializable{
         creditoSwitch.setDisable(false);
         tfMontoCredito.setEditable(true);
         fechaNacimiento.setDisable(false);
+        creditoSwitch.setDisable(false);
         //for de los campos variables
 
     }
@@ -160,6 +170,7 @@ public class verClienteSceneController implements Initializable{
         creditoSwitch.setDisable(true);
         tfMontoCredito.setEditable(false);
         fechaNacimiento.setDisable(true);
+        creditoSwitch.setDisable(true);
     }
 
     //Boton "Eliminar" que permite eliminar un cliente
@@ -205,5 +216,6 @@ public class verClienteSceneController implements Initializable{
         scrollPaneFields.setVisible(false);
         fechaNacimiento.setEditable(false);
         fechaNacimiento.setDisable(true);
+        creditoSwitch.setDisable(true);
     }
 }
