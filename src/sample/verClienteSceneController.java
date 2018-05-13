@@ -8,6 +8,7 @@ import javafx.scene.layout.HBox;
 import org.controlsfx.control.ToggleSwitch;
 
 import java.net.URL;
+import java.sql.ResultSet;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -99,7 +100,22 @@ public class verClienteSceneController implements Initializable{
     @FXML
     void buscarButtonAction(){
         //hacer aqui lo que busca el usuario y setea los valores
-        scrollPaneFields.setVisible(true);
+        try {
+            ResultSet rs = serverSQL.getUserbyID(Integer.parseInt(tfBuscarUsuario.getText()));
+            rs.next();
+            tfNombre.setText(rs.getString("nombre"));
+            tfApellido.setText(rs.getString("apellido"));
+            tfImagen.setText(rs.getString("local_image"));
+            twitterName.setText(rs.getString("twitter_user"));
+            tfTwitterUsername.setText(rs.getString("twitter_user"));
+            tfUltimaCompra.setText(rs.getString("ultima_compra"));
+
+
+            scrollPaneFields.setVisible(true);
+        }
+        catch (Exception e){
+            System.out.println(e);
+        }
     }
 
     //Boton "Modificar" que habilita que los textfields con los daros del usuario sean editables
