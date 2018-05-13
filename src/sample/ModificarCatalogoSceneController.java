@@ -33,6 +33,15 @@ public class ModificarCatalogoSceneController implements Initializable{
         }
     }
 
+    @FXML
+    Button nuevoButton;
+
+    @FXML
+    void nuevoButtonAction(){
+        ObservableList<Catalogo> data = table.getItems();
+        table.getItems().add(new Catalogo(""+data.size(), "nuevo"));
+    }
+
     void fillCatalogos(){
         cb_Catalogo.getItems().addAll("Hola", "Adios", "Ste", "Men");
     }
@@ -55,15 +64,15 @@ public class ModificarCatalogoSceneController implements Initializable{
                 data.add(new Catalogo(""+i, "hola"));
             }
             columnaID.setCellValueFactory(new PropertyValueFactory<Catalogo,String>("id"));
-            columnaID.setCellFactory(TextFieldTableCell.forTableColumn());
-            columnaID.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent>() {
+            //columnaID.setCellFactory(TextFieldTableCell.forTableColumn());
+            /*columnaID.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent>() {
                 @Override
                 public void handle(TableColumn.CellEditEvent event) {
                     ((Catalogo) event.getTableView().getItems().get(
                             event.getTablePosition().getRow())
                     ).setId(event.getNewValue().toString());
                 }
-            });
+            });*/
 
             columnaNombre.setCellValueFactory(new PropertyValueFactory<Catalogo,String>("Nombre"));
             columnaNombre.setCellFactory(TextFieldTableCell.forTableColumn());

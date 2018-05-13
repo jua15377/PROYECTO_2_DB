@@ -125,5 +125,49 @@ public class ServerSQL {
 
     }
 
+    public ResultSet viewDataFromTable(String tabla, String filtro, String orden){
+        try{
+            ResultSet rs;
+            if(filtro.equals("-None-")){
+                Statement st = c.createStatement();
+                rs = st.executeQuery("SELECT * FROM "+tabla);
+            }else if(orden.equals("-None-")){
+                Statement st = c.createStatement();
+                rs = st.executeQuery("SELECT * FROM "+tabla + " ORDER BY " + filtro);
+            }else{
+                Statement st = c.createStatement();
+                if(orden.equals("Ascendente")){
+                    orden = "ASC";
+                }else{
+                    orden = "DESC";
+                }
+                rs = st.executeQuery("SELECT * FROM "+tabla + " ORDER BY " + filtro + " " + orden);
+            }
+            return rs;
+        }catch (SQLException e){
+            System.out.println("Error durante la ejecuion de query");
+            System.out.println(e);
+        }
+        return null;
+    }
+
+    public ArrayList<String> viewColumnsFromTable(String table){
+        try{
+            PreparedStatement pstmt = c.prepareStatement("select * from " + table);
+            ResultSetMetaData meta = pstmt.getMetaData();
+            ArrayList<String> res = new ArrayList<>();
+            for (int i=1; i <= meta.getColumnCount(); i++)
+            {
+                //System.out.println("Column name: " + meta.getColumnName(i) + ", data type: " + meta.getColumnTypeName(i));
+                res.add(meta.getColumnName(i));
+            }
+            return res;
+        }catch (SQLException e){
+            System.out.println("Error durante la ejecuion de query");
+            System.out.println(e);
+        }
+        return null;
+    }
+
 
 }

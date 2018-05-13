@@ -24,6 +24,11 @@
                      </font>
                   </Label>
                   <ComboBox fx:id="cb_Catalogo" onAction="#catalogoListener" prefHeight="37.0" prefWidth="358.0" />
+                  <Button fx:id="nuevoButton" layoutX="612.0" layoutY="20.0" mnemonicParsing="false" onAction="#nuevoButtonAction" text="Nuevo dato">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Button>
                   <Button fx:id="guardarButton" mnemonicParsing="false" onAction="#guardarButtonAction" text="Guardar cambios">
                      <font>
                         <Font size="16.0" />

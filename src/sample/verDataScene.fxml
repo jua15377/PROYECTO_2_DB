@@ -1,14 +1,59 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import de.jensd.fx.glyphs.fontawesome.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
 <?import java.lang.*?>
 <?import java.util.*?>
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.VerDataSceneController">
+<AnchorPane prefHeight="755.0" prefWidth="1309.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.VerDataSceneController">
    <children>
-      <Label layoutX="278.0" layoutY="192.0" text="Ver data" />
+      <VBox prefHeight="628.0" prefWidth="895.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <HBox alignment="CENTER_LEFT" spacing="10.0">
+               <children>
+                  <FontAwesomeIcon iconName="SEARCH" size="1.5em" />
+                  <Label text="Seleccione una tabla:">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Label>
+                  <ComboBox fx:id="cb_tabla" onAction="#fillCBfiltro" prefHeight="37.0" prefWidth="298.0" />
+                  <Label layoutX="67.0" layoutY="20.0" text="Filtrar por:">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Label>
+                  <ComboBox fx:id="cb_filtro" layoutX="217.0" layoutY="20.0" prefHeight="37.0" prefWidth="222.0" />
+                  <Label layoutX="585.0" layoutY="26.0" text="Orden:">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Label>
+                  <ComboBox fx:id="cb_orden" layoutX="668.0" layoutY="20.0" prefHeight="37.0" prefWidth="212.0" />
+                  <Button fx:id="buscarButton" mnemonicParsing="false" onAction="#buscarButtonAction" text="Buscar">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Button>
+               </children>
+               <padding>
+                  <Insets bottom="10.0" left="30.0" top="10.0" />
+               </padding>
+            </HBox>
+            <TableView fx:id="table" prefHeight="657.0" prefWidth="997.0">
+               <columns>
+                  <TableColumn prefWidth="75.0" text="C1" />
+                  <TableColumn prefWidth="75.0" text="C2" />
+               </columns>
+               <padding>
+                  <Insets left="20.0" right="20.0" />
+               </padding>
+            </TableView>
+         </children>
+      </VBox>
    </children>
 </AnchorPane>
