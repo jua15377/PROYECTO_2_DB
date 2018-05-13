@@ -1,5 +1,5 @@
 package sample;
-
+import manejador.*;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -12,7 +12,7 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class verClienteSceneController implements Initializable{
-
+    private ServerSQL serverSQL = new ServerSQL();
     //Textfield que contiene el nombre del cliente
     @FXML
     TextField tfNombre;

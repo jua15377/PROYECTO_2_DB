@@ -1,8 +1,7 @@
 package manejador;
 
 
-import com.sun.jndi.toolkit.url.Uri;
-import twitter4j.Status;
+
 import twitter4j.Twitter;
 import twitter4j.TwitterFactory;
 import twitter4j.User;

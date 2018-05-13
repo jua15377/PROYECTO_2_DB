@@ -99,6 +99,22 @@ public class ServerSQL {
         }
     }
 
+    public ResultSet getUserbyID(int id){
+
+        try {
+            PreparedStatement st = c.prepareStatement("SELECT  * FROM cliente WHERE  id = ?");
+            st.setInt(1,id);
+            ResultSet rs = st.executeQuery();
+            st.close();
+            return rs;
+
+        }
+        catch (SQLException e){
+            System.out.println("Error durante la ejecuion de query");
+        }
+        return null;
+    }
+
     public  void closeConnectionToServer (){
         try {
             c.close();
