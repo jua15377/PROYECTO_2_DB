@@ -63,7 +63,7 @@ public class ServerSQL {
                                 String depto, String ocupacion,String banco,String sucursal, String categoria,double ultimaCompra, boolean tieneCredito,  double cantidadeCredito ){
         try {
             PreparedStatement st = c.prepareStatement ("INSERT INTO cliente VALUES(" +
-                    "(select max(id)+1 from cliente)," +
+                    "(NEXTVAL('sec_cliente'))," +
                     "?, ?, ?, ? , ?, ?," +
                     "(select d.id_departamento from departamento d where departamento = ?)," +
                     "(select ocu.id_ocupacion from ocupacion ocu  where nombre_ocupacion = ?)," +
@@ -78,8 +78,8 @@ public class ServerSQL {
             st.setString(2,apellido);
             st.setDate(3,fechaNacimiento);
             st.setString(4, twUser);
-            st.setString(5, rutaLocal);
-            st.setString(6, rutaTw);
+            st.setString(5, rutaTw);
+            st.setString(6, rutaLocal);
             st.setString(7, depto);
             st.setString(8, ocupacion);
             st.setString(9, banco);
@@ -100,13 +100,26 @@ public class ServerSQL {
     }
 
     public ResultSet getUserbyID(int id){
-
         try {
             PreparedStatement st = c.prepareStatement("SELECT  * FROM cliente WHERE  id = ?");
             st.setInt(1,id);
             ResultSet rs = st.executeQuery();
-            st.close();
             return rs;
+
+        }
+        catch (SQLException e){
+            System.out.println("Error durante la ejecuion de query");
+        }
+        return null;
+    }
+
+    public ResultSet deleteUserbyID(int id){
+
+        try {
+            PreparedStatement st = c.prepareStatement("DELETE FROM cliente WHERE  id = ?");
+            st.setInt(1,id);
+            st.executeUpdate();
+            st.close();
 
         }
         catch (SQLException e){
