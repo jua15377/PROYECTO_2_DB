@@ -1,14 +1,391 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import de.jensd.fx.glyphs.fontawesome.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.text.*?>
+<?import org.controlsfx.control.*?>
 <?import java.lang.*?>
 <?import java.util.*?>
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.verClienteSceneController">
+<AnchorPane prefHeight="889.0" prefWidth="1731.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.verClienteSceneController">
    <children>
-      <Label layoutX="271.0" layoutY="192.0" text="Ver Cliente" />
+      <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <HBox alignment="CENTER_LEFT" spacing="10.0">
+               <children>
+                  <FontAwesomeIcon iconName="SEARCH" size="1.5em" />
+                  <Label text="Buscar cliente por ID:">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="tfBuscarUsuario" prefHeight="25.0" prefWidth="367.0" promptText="Ingrese el ID del usuario" />
+                  <Button fx:id="buscarButton" mnemonicParsing="false" onAction="#buscarButtonAction" text="Buscar">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Button>
+               </children>
+               <padding>
+                  <Insets bottom="10.0" left="30.0" top="10.0" />
+               </padding>
+            </HBox>
+            <ScrollPane fx:id="scrollPaneFields" prefHeight="832.0" VBox.vgrow="ALWAYS">
+               <content>
+                  <HBox alignment="CENTER" spacing="10.0">
+                     <children>
+                        <VBox prefWidth="100.0">
+                           <children>
+                              <ImageView fx:id="imagenUsuario" fitHeight="243.0" fitWidth="272.0" pickOnBounds="true" preserveRatio="true">
+                                 <VBox.margin>
+                                    <Insets left="10.0" top="50.0" />
+                                 </VBox.margin>
+                              </ImageView>
+                           </children>
+                        </VBox>
+                        <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefWidth="505.0">
+                           <children>
+                              <HBox alignment="CENTER_LEFT">
+                                 <children>
+                                    <VBox alignment="CENTER_RIGHT" prefWidth="200.0">
+                                       <children>
+                                          <Label text="Nombre:">
+                                             <font>
+                                                <Font size="16.0" />
+                                             </font>
+                                             <padding>
+                                                <Insets left="40.0" right="10.0" />
+                                             </padding>
+                                          </Label>
+                                       </children>
+                                    </VBox>
+                                    <TextField fx:id="tfNombre" editable="false" prefHeight="37.0" prefWidth="263.0" promptText="ej. Galio">
+                                       <font>
+                                          <Font size="16.0" />
+                                       </font>
+                                    </TextField>
+                                 </children>
+                                 <padding>
+                                    <Insets bottom="20.0" top="20.0" />
+                                 </padding>
+                              </HBox>
+                              <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="10.0" VBox.vgrow="ALWAYS">
+                                 <children>
+                                    <VBox alignment="CENTER_RIGHT" prefWidth="200.0">
+                                       <children>
+                                          <Label text="Apellido:">
+                                             <font>
+                                                <Font size="16.0" />
+                                             </font>
+                                             <padding>
+                                                <Insets left="40.0" right="10.0" />
+                                             </padding>
+                                          </Label>
+                                       </children>
+                                    </VBox>
+                                    <TextField fx:id="tfApellido" editable="false" prefHeight="37.0" prefWidth="263.0" promptText="ej. Justicia">
+                                       <font>
+                                          <Font size="16.0" />
+                                       </font>
+                                    </TextField>
+                                 </children>
+                                 <padding>
+                                    <Insets bottom="20.0" top="20.0" />
+                                 </padding>
+                              </HBox>
+                              <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="87.0">
+                                 <children>
+                                    <VBox alignment="CENTER_RIGHT" prefWidth="200.0">
+                                       <children>
+                                          <Label text="Imagen de perfil:">
+                                             <font>
+                                                <Font size="16.0" />
+                                             </font>
+                                             <padding>
+                                                <Insets left="40.0" right="10.0" />
+                                             </padding>
+                                          </Label>
+                                       </children>
+                                    </VBox>
+                                    <HBox prefWidth="263.0" spacing="10.0">
+                                       <children>
+                                          <TextField fx:id="tfImagen" editable="false" prefHeight="37.0" prefWidth="263.0" promptText="Subir archivo">
+                                             <font>
+                                                <Font size="16.0" />
+                                             </font>
+                                          </TextField>
+                                          <Button fx:id="loadButton" disable="true" mnemonicParsing="false" onAction="#loadButtonAction" prefHeight="38.0" prefWidth="143.0" text="Cargar" />
+                                       </children>
+                                    </HBox>
+                                 </children>
+                                 <padding>
+                                    <Insets bottom="20.0" top="20.0" />
+                                 </padding>
+                              </HBox>
+                              <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="87.0">
+                                 <children>
+                                    <VBox alignment="CENTER_RIGHT" prefWidth="200.0">
+                                       <children>
+                                          <Label text="Fecha de nacimiento:">
+                                             <font>
+                                                <Font size="16.0" />
+                                             </font>
+                                             <padding>
+                                                <Insets left="40.0" right="10.0" />
+                                             </padding>
+                                          </Label>
+                                       </children>
+                                    </VBox>
+                                    <DatePicker fx:id="fechaNacimiento" editable="false" prefHeight="37.0" prefWidth="262.0" promptText="MM/DD/AAAA" />
+                                 </children>
+                                 <padding>
+                                    <Insets bottom="20.0" top="20.0" />
+                                 </padding>
+                              </HBox>
+                              <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="87.0">
+                                 <children>
+                                    <VBox alignment="CENTER_RIGHT" prefWidth="200.0">
+                                       <children>
+                                          <Label text="Twiiter Username:">
+                                             <font>
+                                                <Font size="16.0" />
+                                             </font>
+                                             <padding>
+                                                <Insets left="40.0" right="10.0" />
+                                             </padding>
+                                          </Label>
+                                       </children>
+                                    </VBox>
+                                    <TextField fx:id="tfTwitterUsername" editable="false" prefHeight="37.0" prefWidth="263.0" promptText="\@ejemplo">
+                                       <font>
+                                          <Font size="16.0" />
+                                       </font>
+                                    </TextField>
+                                 </children>
+                                 <padding>
+                                    <Insets bottom="20.0" top="20.0" />
+                                 </padding>
+                              </HBox>
+                              <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="241.0">
+                                 <children>
+                                    <VBox alignment="CENTER_RIGHT" prefWidth="200.0">
+                                       <children>
+                                          <Label text="Ocupacion:">
+                                             <font>
+                                                <Font size="16.0" />
+                                             </font>
+                                             <padding>
+                                                <Insets left="40.0" right="10.0" />
+                                             </padding>
+                                          </Label>
+                                       </children>
+                                    </VBox>
+                                    <ChoiceBox fx:id="cb_Ocupacion" disable="true" prefHeight="37.0" prefWidth="263.0" />
+                                 </children>
+                                 <padding>
+                                    <Insets bottom="20.0" top="20.0" />
+                                 </padding>
+                              </HBox>
+                              <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="318.0">
+                                 <children>
+                                    <VBox alignment="CENTER_RIGHT" prefWidth="200.0">
+                                       <children>
+                                          <Label text="Departamento">
+                                             <font>
+                                                <Font size="16.0" />
+                                             </font>
+                                             <padding>
+                                                <Insets left="40.0" right="10.0" />
+                                             </padding>
+                                          </Label>
+                                       </children>
+                                    </VBox>
+                                    <ChoiceBox fx:id="cb_Departamento" disable="true" prefHeight="37.0" prefWidth="263.0" />
+                                 </children>
+                                 <padding>
+                                    <Insets bottom="20.0" top="20.0" />
+                                 </padding>
+                              </HBox>
+                              <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="383.0">
+                                 <children>
+                                    <VBox alignment="CENTER_RIGHT" prefWidth="200.0">
+                                       <children>
+                                          <Label text="Banco">
+                                             <font>
+                                                <Font size="16.0" />
+                                             </font>
+                                             <padding>
+                                                <Insets left="40.0" right="10.0" />
+                                             </padding>
+                                          </Label>
+                                       </children>
+                                    </VBox>
+                                    <ChoiceBox fx:id="cb_Banco" disable="true" prefHeight="37.0" prefWidth="263.0" />
+                                 </children>
+                                 <padding>
+                                    <Insets bottom="20.0" top="20.0" />
+                                 </padding>
+                              </HBox>
+                              <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="383.0">
+                                 <children>
+                                    <VBox alignment="CENTER_RIGHT" prefWidth="200.0">
+                                       <children>
+                                          <Label text="Sucursal favorita:">
+                                             <font>
+                                                <Font size="16.0" />
+                                             </font>
+                                             <padding>
+                                                <Insets left="40.0" right="10.0" />
+                                             </padding>
+                                          </Label>
+                                       </children>
+                                    </VBox>
+                                    <ChoiceBox fx:id="cb_Sucursal" disable="true" prefHeight="37.0" prefWidth="263.0" />
+                                 </children>
+                                 <padding>
+                                    <Insets bottom="20.0" top="20.0" />
+                                 </padding>
+                              </HBox>
+                              <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="578.0">
+                                 <children>
+                                    <VBox alignment="CENTER_RIGHT" prefWidth="200.0">
+                                       <children>
+                                          <Label text="Categoria favorita:">
+                                             <font>
+                                                <Font size="16.0" />
+                                             </font>
+                                             <padding>
+                                                <Insets left="40.0" right="10.0" />
+                                             </padding>
+                                          </Label>
+                                       </children>
+                                    </VBox>
+                                    <ChoiceBox fx:id="cb_Categoria" disable="true" prefHeight="37.0" prefWidth="263.0" />
+                                 </children>
+                                 <padding>
+                                    <Insets bottom="20.0" top="20.0" />
+                                 </padding>
+                              </HBox>
+                              <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="306.0">
+                                 <children>
+                                    <VBox alignment="CENTER_RIGHT" prefWidth="200.0">
+                                       <children>
+                                          <Label text="Ultima compra:">
+                                             <font>
+                                                <Font size="16.0" />
+                                             </font>
+                                             <padding>
+                                                <Insets left="40.0" right="10.0" />
+                                             </padding>
+                                          </Label>
+                                       </children>
+                                    </VBox>
+                                    <TextField fx:id="tfUltimaCompra" editable="false" prefHeight="37.0" prefWidth="263.0" promptText="Q. 15.00">
+                                       <font>
+                                          <Font size="16.0" />
+                                       </font>
+                                    </TextField>
+                                 </children>
+                                 <padding>
+                                    <Insets bottom="20.0" top="20.0" />
+                                 </padding>
+                              </HBox>
+                              <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="164.0">
+                                 <children>
+                                    <VBox alignment="CENTER_RIGHT" prefWidth="200.0">
+                                       <children>
+                                          <Label text="Credito:">
+                                             <font>
+                                                <Font size="16.0" />
+                                             </font>
+                                             <padding>
+                                                <Insets left="40.0" right="10.0" />
+                                             </padding>
+                                          </Label>
+                                       </children>
+                                    </VBox>
+                                    <HBox alignment="CENTER" prefWidth="263.0" spacing="10.0">
+                                       <children>
+                                          <ToggleSwitch fx:id="creditoSwitch" disable="true" onMouseClicked="#creditoSwitchListener" />
+                                          <TextField fx:id="tfMontoCredito" disable="true" editable="false" prefHeight="37.0" prefWidth="263.0" promptText="Monto">
+                                             <font>
+                                                <Font size="16.0" />
+                                             </font>
+                                          </TextField>
+                                       </children>
+                                    </HBox>
+                                 </children>
+                                 <padding>
+                                    <Insets bottom="20.0" top="20.0" />
+                                 </padding>
+                              </HBox>
+                              <HBox fx:id="thebox" prefWidth="600.0" VBox.vgrow="ALWAYS">
+                                 <children>
+                                    <ListView fx:id="fieldsList" minWidth="-Infinity" prefHeight="37.0" prefWidth="463.0" HBox.hgrow="ALWAYS" />
+                                 </children>
+                                 <padding>
+                                    <Insets left="10.0" />
+                                 </padding>
+                              </HBox>
+                           </children>
+                        </VBox>
+                        <VBox spacing="30.0">
+                           <children>
+                              <Button fx:id="modificarButton" mnemonicParsing="false" onAction="#modificarButtonAction" prefHeight="37.0" prefWidth="152.0" text="Modificar">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                              </Button>
+                              <Button fx:id="guardarButton" disable="true" layoutX="10.0" layoutY="107.0" mnemonicParsing="false" onAction="#guardarButtonAction" prefHeight="37.0" prefWidth="152.0" text="Guardar cambios">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                              </Button>
+                              <Button fx:id="eliminarButton" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#eliminarButtonAction" prefHeight="37.0" prefWidth="152.0" text="Eliminar">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                              </Button>
+                           </children>
+                           <padding>
+                              <Insets top="30.0" />
+                           </padding>
+                        </VBox>
+                        <ScrollPane prefHeight="962.0" prefWidth="766.0">
+                           <padding>
+                              <Insets left="10.0" />
+                           </padding>
+                           <content>
+                              <VBox prefHeight="838.0" prefWidth="709.0">
+                                 <children>
+                                    <HBox prefHeight="100.0" prefWidth="200.0" spacing="20.0">
+                                       <children>
+                                          <ImageView fx:id="imagenTwitter" fitHeight="150.0" fitWidth="175.0" pickOnBounds="true" preserveRatio="true" />
+                                          <VBox alignment="CENTER" spacing="10.0">
+                                             <children>
+                                                <Label fx:id="twitterName" text="Username">
+                                                   <font>
+                                                      <Font size="24.0" />
+                                                   </font>
+                                                </Label>
+                                             </children>
+                                          </VBox>
+                                       </children>
+                                    </HBox>
+                                    <ListView fx:id="tweetsList" prefHeight="678.0" prefWidth="777.0" />
+                                 </children>
+                              </VBox>
+                           </content>
+                        </ScrollPane>
+                     </children>
+                  </HBox>
+               </content>
+            </ScrollPane>
+         </children>
+      </VBox>
    </children>
 </AnchorPane>
