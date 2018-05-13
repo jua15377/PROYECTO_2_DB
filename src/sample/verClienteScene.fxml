@@ -310,7 +310,7 @@
                                     </VBox>
                                     <HBox alignment="CENTER" prefWidth="263.0" spacing="10.0">
                                        <children>
-                                          <ToggleSwitch fx:id="creditoSwitch" disable="true" onMouseClicked="#creditoSwitchListener" />
+                                          <ToggleSwitch fx:id="creditoSwitch" onMouseClicked="#creditoSwitchListener" />
                                           <TextField fx:id="tfMontoCredito" disable="true" editable="false" prefHeight="37.0" prefWidth="263.0" promptText="Monto">
                                              <font>
                                                 <Font size="16.0" />
