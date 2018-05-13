@@ -1,16 +1,21 @@
-package Managedor;
+package manejador;
 
 
+import com.sun.jndi.toolkit.url.Uri;
 import twitter4j.Status;
 import twitter4j.Twitter;
 import twitter4j.TwitterFactory;
+import twitter4j.User;
 import twitter4j.conf.ConfigurationBuilder;
 
+import java.net.URL;
 import java.util.List;
 
 public class ConnectionToTwitter {
     ConfigurationBuilder cb = new ConfigurationBuilder();
     Credenciales credenciales = new Credenciales();
+    TwitterFactory tf;
+    Twitter twitter;
 
     public ConnectionToTwitter(){
 
@@ -19,23 +24,25 @@ public class ConnectionToTwitter {
                 .setOAuthConsumerSecret(credenciales.getTwitterConsumeSecret())
                 .setOAuthAccessToken(credenciales.getTwitterAccesToken())
                 .setOAuthAccessTokenSecret(credenciales.getTwitterAccesTokenSecret());
-        TwitterFactory tf = new TwitterFactory(cb.build());
-        Twitter twitter = tf.getInstance();
+        tf = new TwitterFactory(cb.build());
+        twitter = tf.getInstance();
+    }
 
+    public String getUserImageLink(String userName){
+        String ruta = "";
         try {
+            User user = twitter.showUser(userName);
+            ruta = user.getBiggerProfileImageURL();
+            ruta = ruta.replace("_bigger", "");
+            System.out.println(ruta);
 
-//            List<Status> statuses = twitter.getUserTimeline("geektenango");
-            List<Status> statuses = twitter.getFavorites("geektenango");
-//            List<Status> statuses = twitter.getConfiguration ("geektenango");
-
-
-            for (Status s : statuses){
-                System.out.println("@" + s.getUser().getScreenName() + " - " + s.getText() );
-            }
         }
         catch (Exception e){
             System.out.println(e);
+            ruta = "";
         }
 
+
+        return ruta;
     }
 }

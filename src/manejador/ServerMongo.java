@@ -1,4 +1,4 @@
-package Managedor;
+package manejador;
 
 
 import com.mongodb.MongoClient;

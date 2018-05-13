@@ -1,6 +1,6 @@
-package Managedor;
+package manejador;
 
-import java.util.Scanner;
+import java.sql.Date;
 
 public class PostgreSQLJDBC {
     public static void main(String args[]) {
@@ -9,13 +9,15 @@ public class PostgreSQLJDBC {
         ///Scanner s = new Scanner(System.in);
         //String a = s.nextLine();
         //serverSQL.executeSelectAllCliente();
-        System.out.println(serverSQL.getNamesFromCatalog("asdf"));
-        serverSQL.closeConnectionToServer();
+        Date d = Date.valueOf("2010-10-10");
+        serverSQL.insertCliente("alguien","x",d, "sebastian_g_c","","", "Guatemala", "Estudiante", "BAC", "Express", "Teclados" , 150.85,false, 0);
+        //serverSQL.closeConnectionToServer();
         //serverSQL.closeConnectionToServe();
         //ServerMongo serverMongo = new ServerMongo();
         //serverMongo.insertOn();
         //serverMongo.closeConnection();
-        //ConnectionToTwitter connectionToTwitter = new ConnectionToTwitter();
+//        ConnectionToTwitter connectionToTwitter = new ConnectionToTwitter();
+//        connectionToTwitter.getUserImageLink("geektenango");
 
     }
 }

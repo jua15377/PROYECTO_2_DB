@@ -1,35 +1,30 @@
 package sample;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
 import javafx.scene.control.*;
-import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.ImagePattern;
-import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
-import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import org.controlsfx.control.ToggleSwitch;
 
 import java.io.File;
 import java.net.URL;
-import java.util.Optional;
-import java.util.ResourceBundle;
+import java.sql.Date;
+import java.util.*;
+
+import manejador.*;
+
+import javax.xml.crypto.Data;
 
 public class agregarClienteController implements Initializable{
-
+    private ServerSQL  serverSQL = new ServerSQL();
+    private HashMap<String,String> camposExtras = new HashMap<>();
     @FXML
     Button addButton;
-
     @FXML
     Button addField;
 
@@ -68,38 +63,50 @@ public class agregarClienteController implements Initializable{
 
 
     @FXML
-    ChoiceBox cb_Sucursal;
+    ChoiceBox<String> cb_Sucursal;
 
     public void fillcb_Sucursal(){
-        cb_Sucursal.getItems().addAll();
+        cb_Sucursal.getItems().addAll(
+                serverSQL.getNamesFromCatalog("sucursal")
+        );
     }
 
     @FXML
-    ChoiceBox cb_Categoria;
+    ChoiceBox<String> cb_Categoria;
 
     public void fillcb_Categoria(){
-        cb_Categoria.getItems().addAll();
+        cb_Categoria.getItems().addAll(
+                serverSQL.getNamesFromCatalog("categoria_producto")
+
+        );
     }
 
     @FXML
-    ChoiceBox cb_Ocupacion;
+    ChoiceBox<String> cb_Ocupacion;
 
     public void fillcb_Ocupacion(){
-        cb_Ocupacion.getItems().addAll();
+        cb_Ocupacion.getItems().addAll(
+               serverSQL.getNamesFromCatalog("ocupacion")
+
+        );
     }
 
     @FXML
-    ChoiceBox cb_Banco;
+    ChoiceBox<String> cb_Banco;
 
     public void fillcb_Banco(){
-        cb_Banco.getItems().addAll();
+        cb_Banco.getItems().addAll(
+                serverSQL.getNamesFromCatalog("banco")
+        );
     }
 
     @FXML
-    ChoiceBox cb_Departamento;
+    ChoiceBox<String> cb_Departamento;
 
     public void fillcb_Departamento(){
-        cb_Departamento.getItems().addAll();
+        cb_Departamento.getItems().addAll(
+                serverSQL.getNamesFromCatalog("departamento")
+        );
     }
 
     @FXML
@@ -153,6 +160,7 @@ public class agregarClienteController implements Initializable{
         hbox.getChildren().add(vbox);
         hbox.getChildren().add(myTextField);
         fieldsList.getItems().add(hbox);
+        camposExtras.put(s.getText(),myTextField.getText());
     }
 
     public void addButtonAction(){
@@ -165,6 +173,60 @@ public class agregarClienteController implements Initializable{
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == ButtonType.OK){
             // ... user chose OK
+            // check here for special characters
+
+            String nombre = tfNombre.getText();
+            String apeliido = tfApellido.getText();
+            Date date = Date.valueOf(fechaNacimiento.getValue().toString());
+            String twitterUser;
+            if (tfTwitterUsername.getText().contains("@")){
+                twitterUser = tfTwitterUsername.getText().replace("@","");
+            }
+            else {
+                twitterUser = tfTwitterUsername.getText();
+            }
+            String rutaimagenLocal = tfImagen.getText();
+            String rutaTwitter;
+            if(!tfTwitterUsername.getText().isEmpty()) {
+                ConnectionToTwitter connectionToTwitter = new ConnectionToTwitter();
+                 rutaTwitter = connectionToTwitter.getUserImageLink(twitterUser);
+            }
+            else{
+                 rutaTwitter = "";
+            }
+
+            // verificar que esto no sea null
+
+            String depto = cb_Departamento.getSelectionModel().getSelectedItem();
+            String ocupacion = cb_Ocupacion.getSelectionModel().getSelectedItem();
+            String banco = cb_Banco.getSelectionModel().getSelectedItem();
+            String sucursal = cb_Sucursal.getSelectionModel().getSelectedItem();
+            String categoria = cb_Categoria.getSelectionModel().getSelectedItem();
+            double ultcompra;
+            if(!tfUltimaCompra.getText().isEmpty()) {
+                ultcompra = Double.parseDouble(tfUltimaCompra.getText());
+            }
+            else {
+                ultcompra = 0;
+            }
+            boolean haveCredito= creditoSwitch.isSelected();
+            double cantCredito;
+            if(!tfMontoCredito.getText().isEmpty()) {
+                 cantCredito = Double.parseDouble(tfMontoCredito.getText());
+            }
+            else {
+                 cantCredito = 0;
+            }
+            //aca se leeran multiples campos
+            if(!camposExtras.isEmpty()){
+                for (Map.Entry<String,String> s : camposExtras.entrySet() ){
+
+                }
+            }
+            //inserta en la bae de datos
+            serverSQL.insertCliente(nombre,apeliido,date, twitterUser,rutaimagenLocal,rutaTwitter, depto, ocupacion, banco, sucursal, categoria , ultcompra,haveCredito, cantCredito);
+            //buscar tweets
+
             Alert alert1 = new Alert(Alert.AlertType.INFORMATION);
             alert1.setTitle("Confirmacion");
             alert1.setHeaderText(null);
@@ -193,6 +255,8 @@ public class agregarClienteController implements Initializable{
         fillcb_Banco();
         fillcb_Departamento();
         fillcb_Ocupacion();
+        fillcb_Sucursal();
+        fillcb_Categoria();
 
         Image img = new Image("file:default.png");
         imagen.setImage(img);
