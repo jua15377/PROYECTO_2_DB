@@ -1,4 +1,5 @@
 package sample;
+import javafx.scene.image.Image;
 import manejador.*;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -9,6 +10,7 @@ import org.controlsfx.control.ToggleSwitch;
 
 import java.net.URL;
 import java.sql.ResultSet;
+import java.time.LocalDate;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -35,19 +37,19 @@ public class verClienteSceneController implements Initializable{
     TextField tfTwitterUsername;
 
     @FXML
-    ChoiceBox cb_Ocupacion;
+    ChoiceBox<String> cb_Ocupacion;
 
     @FXML
-    ChoiceBox cb_Departamento;
+    ChoiceBox<String> cb_Departamento;
 
     @FXML
-    ChoiceBox cb_Banco;
+    ChoiceBox<String> cb_Banco;
 
     @FXML
-    ChoiceBox cb_Sucursal;
+    ChoiceBox<String> cb_Sucursal;
 
     @FXML
-    ChoiceBox cb_Categoria;
+    ChoiceBox<String> cb_Categoria;
 
     @FXML
     TextField tfUltimaCompra;
@@ -107,25 +109,48 @@ public class verClienteSceneController implements Initializable{
             alert.setContentText("Ooops, por favor ingresa el ID de un cliente!");
             alert.showAndWait();
         }else{
-            scrollPaneFields.setVisible(true);
-        }
-        try {
-            ResultSet rs = serverSQL.getUserbyID(Integer.parseInt(tfBuscarUsuario.getText()));
-            rs.next();
-            tfNombre.setText(rs.getString("nombre"));
-            tfApellido.setText(rs.getString("apellido"));
-            tfImagen.setText(rs.getString("local_image"));
-            twitterName.setText(rs.getString("twitter_user"));
-            tfTwitterUsername.setText(rs.getString("twitter_user"));
-            tfUltimaCompra.setText(rs.getString("ultima_compra"));
+            try {
+                ResultSet rs = serverSQL.getUserbyID(Integer.parseInt(tfBuscarUsuario.getText()));
+                rs.next();
+
+                tfNombre.setText(rs.getString("nombre"));
+                tfApellido.setText(rs.getString("apellido"));
+                tfImagen.setText(rs.getString("local_image"));
+                twitterName.setText(rs.getString("twitter_user"));
+                tfTwitterUsername.setText(rs.getString("twitter_user"));
+                tfUltimaCompra.setText(rs.getString("ultima_compra"));
+                String path1 = rs.getString("twitter_image");
+                System.out.println(path1);
+                Image img = new Image(path1);
+                imagenTwitter.setImage(img);
+                String path2 = rs.getString("local_image");
+                path2 = "file:"+ path2.replace("\\", "/");
+                System.out.println(path2);
+                Image img1 = new Image(path2);
+                imagenUsuario.setImage(img1);
+                String fecha[] = rs.getString("fecha_nacimiento").split("-");
+                fechaNacimiento.setValue(LocalDate.of(Integer.parseInt(fecha[0]), Integer.parseInt(fecha[1]), Integer.parseInt(fecha[2])));
+                if(rs.getString("tiene_creditos").equals("t")){
+                    creditoSwitch.setSelected (true);
+                }
+                else{
+                    creditoSwitch.setSelected (false);
+                }
+                tfMontoCredito.setText(rs.getString("cant_creditos"));
+                cb_Ocupacion.getSelectionModel().select( Integer.parseInt(rs.getString("id_ocupacio"))-1);
+                cb_Banco.getSelectionModel().select( Integer.parseInt(rs.getString("id_ocupacio"))-1);
+                cb_Departamento.getSelectionModel().select( Integer.parseInt(rs.getString("id_ocupacio"))-1);
+                cb_Categoria.getSelectionModel().select( Integer.parseInt(rs.getString("id_ocupacio"))-1);
+                cb_Sucursal.getSelectionModel().select( Integer.parseInt(rs.getString("id_sucursal"))-1);
 
 
+                scrollPaneFields.setVisible(true);
+            }
+            catch (Exception e){
+                System.out.println(e);
+            }
             scrollPaneFields.setVisible(true);
         }
-        catch (Exception e){
-            System.out.println(e);
-        }
-    }
 
     }
 
@@ -145,7 +170,7 @@ public class verClienteSceneController implements Initializable{
         tfApellido.setEditable(true);
         tfImagen.setEditable(true);
         loadButton.setDisable(false);
-        fechaNacimiento.setEditable(true);
+        fechaNacimiento.setEditable(false);
         tfTwitterUsername.setEditable(true);
         cb_Ocupacion.setDisable(false);
         cb_Departamento.setDisable(false);
@@ -155,7 +180,6 @@ public class verClienteSceneController implements Initializable{
         tfUltimaCompra.setEditable(true);
         creditoSwitch.setDisable(false);
         tfMontoCredito.setEditable(true);
-        fechaNacimiento.setDisable(false);
         creditoSwitch.setDisable(false);
         //for de los campos variables
 
@@ -226,6 +250,40 @@ public class verClienteSceneController implements Initializable{
         }
     }
 
+
+
+    public void fillcb_Sucursal(){
+        cb_Sucursal.getItems().addAll(
+                serverSQL.getNamesFromCatalog("sucursal")
+        );
+    }
+
+
+    public void fillcb_Categoria(){
+        cb_Categoria.getItems().addAll(
+                serverSQL.getNamesFromCatalog("categoria_producto")
+
+        );
+    }
+
+    public void fillcb_Ocupacion(){
+        cb_Ocupacion.getItems().addAll(
+                serverSQL.getNamesFromCatalog("ocupacion")
+
+        );
+    }
+
+    public void fillcb_Banco(){
+        cb_Banco.getItems().addAll(
+                serverSQL.getNamesFromCatalog("banco")
+        );
+    }
+
+    public void fillcb_Departamento(){
+        cb_Departamento.getItems().addAll(
+                serverSQL.getNamesFromCatalog("departamento")
+        );
+    }
     @FXML
     ScrollPane scrollPaneFields;
 
@@ -233,7 +291,11 @@ public class verClienteSceneController implements Initializable{
     public void initialize(URL location, ResourceBundle resources) {
         scrollPaneFields.setVisible(false);
         fechaNacimiento.setEditable(false);
-        fechaNacimiento.setDisable(true);
         creditoSwitch.setDisable(true);
+        fillcb_Banco();
+        fillcb_Departamento();
+        fillcb_Ocupacion();
+        fillcb_Sucursal();
+        fillcb_Categoria();
     }
 }
