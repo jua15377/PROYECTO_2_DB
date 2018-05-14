@@ -51,6 +51,9 @@ public class ServerMongo {
 
     }
 
+    public void findADocument(String key, String value){
+        
+    }
 
 
     public void insertOn(Document doc){

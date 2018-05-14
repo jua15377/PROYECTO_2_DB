@@ -207,6 +207,7 @@ public class verClienteSceneController implements Initializable{
                 newServerSQL.closeConnectionToServer();
 
                 //poner lo de los tweets
+                //pomiendo info en los labels
 
 
             }
