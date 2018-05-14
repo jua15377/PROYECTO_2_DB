@@ -10,6 +10,8 @@ import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static com.mongodb.client.model.Filters.eq;
+
 public class ServerMongo {
     Credenciales credenciales = new Credenciales();
     MongoClient mongoClient ;
@@ -35,6 +37,20 @@ public class ServerMongo {
     public void closeConnection(){
         mongoClient.close();
     }
+
+    public void deleteOneFromKey(String key, String userName){
+
+        try {
+            collection.deleteOne(eq(key, userName));
+        }
+        catch (Exception e){
+            System.out.println("Error en la conexion con servidor Mongo");
+            System.out.println(e);
+
+        }
+
+    }
+
 
 
     public void insertOn(Document doc){

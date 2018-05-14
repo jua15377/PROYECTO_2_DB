@@ -6,8 +6,6 @@ import org.bson.Document;
 import twitter4j.*;
 import twitter4j.conf.ConfigurationBuilder;
 
-import java.lang.reflect.Array;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -46,6 +44,7 @@ public class ConnectionToTwitter {
         return ruta;
     }
     public void  getTweetsFromUserAndInsertOnMongo(String userName){
+
         try {
             Paging paging= new Paging(1,200);
             List<Status> statuses = twitter.getUserTimeline(userName,paging);
@@ -65,7 +64,7 @@ public class ConnectionToTwitter {
 
 
             for (Status status : statuses) {
-                System.out.println(status.getUser().getName() + ":" + status.getText() + status.getCreatedAt());
+                //System.out.println(status.getUser().getName() + ":" + status.getText() + status.getCreatedAt());
                 tweets.add(new Document("texto", status.getText()+"\n")
                         .append("fecha", status.getCreatedAt() + "\n"));
 
@@ -74,6 +73,7 @@ public class ConnectionToTwitter {
             doc.append("tweets", Arrays.asList(tweets));
             ServerMongo serverMongo = new ServerMongo();
             serverMongo.insertOn(doc);
+            serverMongo.closeConnection();
         }
         catch (Exception e) {
             System.out.println("Error en la recoleccion de twetts");
@@ -81,5 +81,16 @@ public class ConnectionToTwitter {
         }
 
     }
+
+    public void updateTweets(String userName){
+        ServerMongo serverMongo= new ServerMongo();
+        serverMongo.deleteOneFromKey("_id",userName);
+        getTweetsFromUserAndInsertOnMongo(userName);
+        serverMongo.closeConnection();
+
+    }
+
+
+
 
 }

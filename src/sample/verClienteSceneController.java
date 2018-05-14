@@ -336,6 +336,11 @@ public class verClienteSceneController implements Initializable{
         newServerSQL.updateCliente (nombre,apeliido,date, twitterUser,rutaimagenLocal,rutaTwitter, depto, ocupacion, banco, sucursal, categoria , ultcompra,haveCredito, cantCredito, this.id, obj);
         newServerSQL.closeConnectionToServer();
 
+        //insertando twetes en el servidor
+        if(!tfTwitterUsername.getText().isEmpty()) {
+            ConnectionToTwitter connectionToTwitter = new ConnectionToTwitter();
+            connectionToTwitter.updateTweets(tfTwitterUsername.getText());
+        }
 
 
     }

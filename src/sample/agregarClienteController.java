@@ -251,6 +251,11 @@ public class agregarClienteController implements Initializable{
             newServerSQL.insertCliente(nombre,apeliido,date, twitterUser,rutaimagenLocal,rutaTwitter, depto, ocupacion, banco, sucursal, categoria , ultcompra,haveCredito, cantCredito, obj);
             newServerSQL.closeConnectionToServer();
             //buscar tweets
+            //insertando twetes en el servidor
+            if(!tfTwitterUsername.getText().isEmpty()) {
+                ConnectionToTwitter connectionToTwitter = new ConnectionToTwitter();
+                connectionToTwitter.getTweetsFromUserAndInsertOnMongo(tfTwitterUsername.getText());
+            }
 
             Alert alert1 = new Alert(Alert.AlertType.INFORMATION);
             alert1.setTitle("Confirmacion");
