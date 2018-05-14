@@ -90,8 +90,8 @@ public class ReportesSceneController {
                 CategoryPlot categoryPlot = barChart.getCategoryPlot();
                 BarRenderer br = (BarRenderer) categoryPlot.getRenderer();
                 br.setMaximumBarWidth(13); // set maximum width to 35% of chart
-                int width = 840;    /* Width of the image */
-                int height = 480;   /* Height of the image */
+                int width = 1280;    /* Width of the image */
+                int height = 720;   /* Height of the image */
 
 
                 String path1 = System.getProperty("user.dir") + "/resources/ingreso_departamento.png";
