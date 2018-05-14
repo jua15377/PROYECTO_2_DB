@@ -29,7 +29,7 @@
                         <Font size="16.0" />
                      </font>
                   </Button>
-                  <Button fx:id="guardarButton" mnemonicParsing="false" onAction="#guardarButtonAction" text="Guardar cambios">
+                  <Button fx:id="guardarButton" mnemonicParsing="false" onAction="#guardarButtonAction" text="Eliminar dato">
                      <font>
                         <Font size="16.0" />
                      </font>

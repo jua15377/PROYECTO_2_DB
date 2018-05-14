@@ -4,6 +4,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.image.Image;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
+import javafx.stage.FileChooser;
 import manejador.*;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -17,6 +18,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import javax.print.Doc;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
@@ -114,6 +116,20 @@ public class verClienteSceneController implements Initializable{
     @FXML
     void loadButtonAction(){
         //Hacer aqui lo del boton de cargar
+        FileChooser fileChooser = new FileChooser();
+        // Set extension filter
+        FileChooser.ExtensionFilter extFilter =
+                new FileChooser.ExtensionFilter("Image files (*.jpg)", "*.jpeg", "*.png");
+        fileChooser.getExtensionFilters().add(extFilter);
+        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Image files (*.jpg)", "*.jpg"));
+        fileChooser.setTitle("Select your profile picture");
+        File selectedFile = fileChooser.showOpenDialog(null);
+        if(selectedFile!=null) {
+            selectedFile.getAbsoluteFile();
+            tfImagen.setText(selectedFile.getAbsolutePath());
+            Image im = new Image(selectedFile.toURI().toString());
+            imagenUsuario.setImage(im);
+        }
     }
 
     //Textfield que contiene el usuario que se quiere buscar
@@ -132,9 +148,9 @@ public class verClienteSceneController implements Initializable{
         //hacer aqui lo que busca el usuario y setea los valores
         if(tfBuscarUsuario.getText().equals("")){
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Busqueda cliente");
+            alert.setTitle("Error Busqueda cliente");
             alert.setHeaderText(null);
-            alert.setContentText("Ooops, por favor ingresa el ID de un cliente!");
+            alert.setContentText("Por favor ingresa el ID de un cliente!");
             alert.showAndWait();
         }else{
             try {
@@ -232,12 +248,17 @@ public class verClienteSceneController implements Initializable{
 
                 }
 
-
+                scrollPaneFields.setVisible(true);
             }
             catch (Exception e){
                 System.out.println(e);
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error Busqueda cliente");
+                alert.setHeaderText(null);
+                alert.setContentText("Ese usuario no existe!");
+
+                alert.showAndWait();
             }
-            scrollPaneFields.setVisible(true);
         }
 
     }
@@ -382,6 +403,13 @@ public class verClienteSceneController implements Initializable{
             connectionToTwitter.updateTweets(tfTwitterUsername.getText());
         }
 
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Information");
+        alert.setHeaderText(null);
+        alert.setContentText("Los cambios han sido guardados!");
+
+        alert.showAndWait();
+
 
     }
 
@@ -425,7 +453,39 @@ public class verClienteSceneController implements Initializable{
 
     @FXML
     void nuevoCampoButtonAction(){
+        fieldsList.setMinHeight(fieldsList.getHeight()+73);
+        Label s = new Label();
+        Font f = new Font(16);
+        s.setFont(f);
+        VBox vbox = new VBox();
+        vbox.setMaxWidth(200);
+        vbox.setPrefWidth(200);
+        s.setText(nameNewField() + ": ");
+        vbox.getChildren().add(s);
+        HBox hbox = new HBox();
+        hbox.setStyle("-fx-padding: 10 0 20 0;");
+        TextField myTextField = new TextField();
+        myTextField.setMaxWidth(267);
+        myTextField.setPrefWidth(267);;
+        myTextField.setFont(f);
+        myTextField.setPromptText("Nuevo campo");
+        hbox.getChildren().add(vbox);
+        hbox.getChildren().add(myTextField);
+        fieldsList.getItems().add(hbox);
+    }
+    public String nameNewField(){
+        TextInputDialog dialog = new TextInputDialog("Nombre del nuevo campo");
+        dialog.setTitle("Creacion de un nuevo campo");
+        dialog.setHeaderText(null);
+        dialog.setContentText("Porfavor ingrese el nombre del nuevo campo:");
 
+        // Traditional way to get the response value.
+        Optional<String> result = dialog.showAndWait();
+        if (result.isPresent()){
+            //System.out.println("Your name: " + result.get());
+            return result.get();
+        }
+        return result.get();
     }
 
     @FXML
@@ -494,6 +554,20 @@ public class verClienteSceneController implements Initializable{
         hbox.getChildren().add(vbox);
         hbox.getChildren().add(myTextField);
         fieldsList.getItems().add(hbox);
+
+    }
+
+    @FXML
+    TextField tfBuscarTweets;
+
+    @FXML
+    Button buscarTweetsButton;
+
+    /*
+     * Hacer aca la parte que busca tweets
+     */
+    @FXML
+    void buscarTweetsButtonAction(){
 
     }
 

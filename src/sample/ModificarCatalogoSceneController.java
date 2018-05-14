@@ -15,6 +15,7 @@ import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -43,8 +44,7 @@ public class ModificarCatalogoSceneController implements Initializable{
     Button nuevoButton;
 
     @FXML
-    void nuevoButtonAction(){
-
+    void nuevoButtonAction() throws SQLException {
         TextInputDialog dialog = new TextInputDialog("Nuevo campo");
         dialog.setTitle("Nuevo campo");
         dialog.setContentText("Ingrese el nuevo valor:");
@@ -52,24 +52,43 @@ public class ModificarCatalogoSceneController implements Initializable{
         // Traditional way to get the response value.
         Optional<String> result = dialog.showAndWait();
         if (result.isPresent()){
-            System.out.println("Your name: " + result.get());
+
+            ObservableList<Catalogo> data = table.getItems();
+            String datos = "("+data.size() +", '" + result.get() + "')";
+            serverSQL.insertCatalog(currentCatalog, datos);
+            //table.getItems().add(new Catalogo(""+data.size(), "nuevo"));
+            refresh();
+            catalogoListener();
+            //verificar que no exista, usuario anadido con exito
+
+            //System.out.println(datos);
+            //System.out.println("Your name: " + result.get());
 
         }
+        //catalogoListener();
 
         // The Java 8 way to get the response value (with lambda expression).
         //result.ifPresent(name -> System.out.println("Your name: " + name));
 
-        ObservableList<Catalogo> data = table.getItems();
-        table.getItems().add(new Catalogo(""+data.size(), "nuevo"));
+        //ObservableList<Catalogo> data = table.getItems();
+
     }
+
+    public void refresh(){
+        table.getItems().clear();
+    }
+
 
     void fillCatalogos(){
         cb_Catalogo.getItems().addAll("ocupacion", "banco", "sucursal", "categoria_producto");
     }
 
     @FXML
-    void catalogoListener() throws SQLException {
-        if(!cb_Catalogo.getSelectionModel().getSelectedItem().toString().equals(currentCatalog)){
+    public void catalogoListener() throws SQLException {
+        ArrayList<String> ids =new ArrayList<>();
+        guardarButton.setDisable(false);
+        nuevoButton.setDisable(false);
+        //if(!cb_Catalogo.getSelectionModel().getSelectedItem().toString().equals(currentCatalog)){
             //quita las columnas actuales de la tabla
             table.getColumns().clear();
             table.setEditable(true);
@@ -101,6 +120,7 @@ public class ModificarCatalogoSceneController implements Initializable{
                 if(currentCatalog.equals("banco")){
                     while(rs.next()){
                         dataBanco.add(new Banco(rs.getString("id_banco"), rs.getString("banco")));
+                        ids.add(rs.getString("id_banco")+","+ rs.getString("banco"));
                     }
                     ObservableList<TableColumn> t = table.getColumns();
                     for (TableColumn tableColumn:t) {
@@ -110,10 +130,15 @@ public class ModificarCatalogoSceneController implements Initializable{
                             tableColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent>() {
                                 @Override
                                 public void handle(TableColumn.CellEditEvent event) {
-                                    ((Catalogo) event.getTableView().getItems().get(
-                                            event.getTablePosition().getRow())
-                                    ).setNombre(event.getNewValue().toString());
-
+                                    String[] parts = null;
+                                    for (String s:ids) {
+                                        System.out.println(s);
+                                        if(s.contains(event.getOldValue().toString())){
+                                            parts = s.split(",");
+                                        }
+                                    }
+                                    System.out.println("Yo soy el nuevoa "+parts[0]);
+                                    serverSQL.updateCatalog(currentCatalog, tableColumn.getText(), event.getNewValue().toString(), "id_banco", parts[0]);
                                 }
                             });
                         }
@@ -123,6 +148,7 @@ public class ModificarCatalogoSceneController implements Initializable{
                     //si escoge el catalogo de categoria_producto
                     while(rs.next()){
                         dataCategoria.add(new Categoria(rs.getString("id_categoria"), rs.getString("nombre_cat")));
+                        ids.add(rs.getString("id_categoria")+","+ rs.getString("nombre_cat"));
                     }
                     ObservableList<TableColumn> t = table.getColumns();
                     for (TableColumn tableColumn:t) {
@@ -132,10 +158,15 @@ public class ModificarCatalogoSceneController implements Initializable{
                             tableColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent>() {
                                 @Override
                                 public void handle(TableColumn.CellEditEvent event) {
-                                    ((Catalogo) event.getTableView().getItems().get(
-                                            event.getTablePosition().getRow())
-                                    ).setNombre(event.getNewValue().toString());
-
+                                    String[] parts = null;
+                                    for (String s:ids) {
+                                        System.out.println(s);
+                                        if(s.contains(event.getOldValue().toString())){
+                                            parts = s.split(",");
+                                        }
+                                    }
+                                    System.out.println("Yo soy el nuevoa "+parts[0]);
+                                    serverSQL.updateCatalog(currentCatalog, tableColumn.getText(), event.getNewValue().toString(), "id_categoria", parts[0]);
                                 }
                             });
                         }
@@ -145,6 +176,7 @@ public class ModificarCatalogoSceneController implements Initializable{
                     while(rs.next()){
                         Ocupacion c = new Ocupacion(rs.getString("id_ocupacion"), rs.getString("nombre_ocupacion"));
                         dataOcupacion.add(c);
+                        ids.add(rs.getString("id_ocupacion")+","+ rs.getString("nombre_ocupacion"));
                     }
                     ObservableList<TableColumn> t = table.getColumns();
                     for (TableColumn tableColumn:t) {
@@ -155,10 +187,15 @@ public class ModificarCatalogoSceneController implements Initializable{
                             tableColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent>() {
                                 @Override
                                 public void handle(TableColumn.CellEditEvent event) {
-                                    ((Catalogo) event.getTableView().getItems().get(
-                                            event.getTablePosition().getRow())
-                                    ).setNombre(event.getNewValue().toString());
-
+                                    String[] parts = null;
+                                    for (String s:ids) {
+                                        System.out.println(s);
+                                        if(s.contains(event.getOldValue().toString())){
+                                            parts = s.split(",");
+                                        }
+                                    }
+                                    System.out.println("Yo soy el nuevoa "+parts[0]);
+                                    serverSQL.updateCatalog(currentCatalog, tableColumn.getText(), event.getNewValue().toString(), "id_ocupacion", parts[0]);
                                 }
                             });
                         }
@@ -167,6 +204,7 @@ public class ModificarCatalogoSceneController implements Initializable{
                 }else if(currentCatalog.equals("sucursal")){
                     while(rs.next()){
                         dataSucursal.add(new Sucursal(rs.getString("id_sucursal"), rs.getString("nombre_sucursal")));
+                        ids.add(rs.getString("id_sucursal")+","+ rs.getString("nombre_sucursal"));
                     }
                     ObservableList<TableColumn> t = table.getColumns();
                     for (TableColumn tableColumn:t) {
@@ -176,10 +214,15 @@ public class ModificarCatalogoSceneController implements Initializable{
                             tableColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent>() {
                                 @Override
                                 public void handle(TableColumn.CellEditEvent event) {
-                                    ((Catalogo) event.getTableView().getItems().get(
-                                            event.getTablePosition().getRow())
-                                    ).setNombre(event.getNewValue().toString());
-
+                                    String[] parts = null;
+                                    for (String s:ids) {
+                                        System.out.println(s);
+                                        if(s.contains(event.getOldValue().toString())){
+                                            parts = s.split(",");
+                                        }
+                                    }
+                                    System.out.println("Yo soy el nuevoa "+parts[0]);
+                                    serverSQL.updateCatalog(currentCatalog, tableColumn.getText(), event.getNewValue().toString(), "id_sucursal", parts[0]);
                                 }
                             });
                         }
@@ -190,13 +233,15 @@ public class ModificarCatalogoSceneController implements Initializable{
                 e.printStackTrace();
             }
             table.setVisible(true);
-        }
+        //}
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         table.setVisible(false);
         fillCatalogos();
+        guardarButton.setDisable(true);
+        nuevoButton.setDisable(true);
         table.getColumns().clear();
     }
 }

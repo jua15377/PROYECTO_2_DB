@@ -173,8 +173,14 @@ public class agregarClienteController implements Initializable{
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error Dialog");
             alert.setHeaderText("Houston, tenemos un problema...");
-            alert.setContentText("Porfavor, selecciona una categoria.");
+            alert.setContentText("Porfavor, ingresa el nombre del cliente.");
 
+            alert.showAndWait();
+        }else if(fechaNacimiento.getEditor().getText().equals("")){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error Dialog");
+            alert.setHeaderText("Houston, tenemos un problema...");
+            alert.setContentText("Porfavor, ingresa la fecha de nacimiento del cliente.");
             alert.showAndWait();
         }else
         if(cb_Categoria.getSelectionModel().getSelectedIndex() == -1){
@@ -302,6 +308,22 @@ public class agregarClienteController implements Initializable{
                 alert1.setHeaderText(null);
                 alert1.setContentText("Usuario agregado con exito!");
                 alert1.showAndWait();
+
+                tfNombre.setText("");
+                tfApellido.setText("");
+                tfImagen.setText("");
+                fechaNacimiento.setValue(null);
+                tfTwitterUsername.setText("");
+                cb_Ocupacion.getSelectionModel().clearSelection();
+                cb_Departamento.getSelectionModel().clearSelection();
+                cb_Banco.getSelectionModel().clearSelection();
+                cb_Sucursal.getSelectionModel().clearSelection();
+                cb_Categoria.getSelectionModel().clearSelection();
+                tfUltimaCompra.setText("");
+                creditoSwitch.setSelected(false);
+                tfMontoCredito.setText("");
+                fieldsList.getItems().clear();
+                fieldsList.setMinHeight(2);
             }
         }
     }
@@ -333,5 +355,6 @@ public class agregarClienteController implements Initializable{
         System.out.println(path1);
         Image img = new Image(path1);
         imagen.setImage(img);
+        fechaNacimiento.getEditor().setDisable(true);
     }
 }

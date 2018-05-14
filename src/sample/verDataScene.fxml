@@ -22,13 +22,13 @@
                      </font>
                   </Label>
                   <ComboBox fx:id="cb_tabla" onAction="#fillCBfiltro" prefHeight="37.0" prefWidth="298.0" />
-                  <Label layoutX="67.0" layoutY="20.0" text="Filtrar por:">
+                  <Label layoutX="67.0" layoutY="20.0" text="Ordenar por:">
                      <font>
                         <Font size="16.0" />
                      </font>
                   </Label>
                   <ComboBox fx:id="cb_filtro" layoutX="217.0" layoutY="20.0" prefHeight="37.0" prefWidth="222.0" />
-                  <Label layoutX="585.0" layoutY="26.0" text="Orden:">
+                  <Label layoutX="585.0" layoutY="26.0" text="En orden">
                      <font>
                         <Font size="16.0" />
                      </font>

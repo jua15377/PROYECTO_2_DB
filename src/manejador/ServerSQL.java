@@ -262,14 +262,20 @@ public class ServerSQL {
 
     public void insertCatalog(String tabla, String datos){
         try{
-            PreparedStatement pstmt = c.prepareStatement("INSERT INTO "+ tabla + " VALUES " + datos);
-            ResultSetMetaData meta = pstmt.getMetaData();
-            ArrayList<String> res = new ArrayList<>();
-            for (int i=1; i <= meta.getColumnCount(); i++)
-            {
-                //System.out.println("Column name: " + meta.getColumnName(i) + ", data type: " + meta.getColumnTypeName(i));
-                res.add(meta.getColumnName(i));
-            }
+            PreparedStatement st = c.prepareStatement("INSERT INTO "+ tabla + " VALUES " + datos);
+            st.executeUpdate();
+            st.close();
+        }catch (SQLException e){
+            System.out.println("Error durante la ejecuion de query");
+            System.out.println(e);
+        }
+    }
+
+    public void updateCatalog(String tabla, String oldData, String newData, String column, String id){
+        try{
+            PreparedStatement st = c.prepareStatement("UPDATE "+ tabla + " SET " + oldData + " = '" + newData + "' WHERE "+ column + " = " + id);
+            st.executeUpdate();
+            st.close();
         }catch (SQLException e){
             System.out.println("Error durante la ejecuion de query");
             System.out.println(e);
