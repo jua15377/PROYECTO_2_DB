@@ -282,5 +282,18 @@ public class ServerSQL {
         }
     }
 
+    public ResultSet executeQuery (String query){
+        try{
+            ResultSet rs;
+            Statement st = c.createStatement();
+            rs = st.executeQuery(query);
+            return rs;
+        }catch (SQLException e){
+            System.out.println("Error durante la ejecuion de query");
+            System.out.println(e);
+        }
+        return null;
+    }
+
 
 }
