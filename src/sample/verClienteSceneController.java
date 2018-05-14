@@ -1,5 +1,9 @@
 package sample;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.image.Image;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 import manejador.*;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -7,16 +11,27 @@ import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import org.controlsfx.control.ToggleSwitch;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.URL;
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.time.LocalDate;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class verClienteSceneController implements Initializable{
     private ServerSQL serverSQL = new ServerSQL();
+    private int id;
     //Textfield que contiene el nombre del cliente
+    ObservableList<HBox> items = FXCollections.observableArrayList ();
+
     @FXML
     TextField tfNombre;
 
@@ -110,25 +125,37 @@ public class verClienteSceneController implements Initializable{
             alert.showAndWait();
         }else{
             try {
-                ResultSet rs = serverSQL.getUserbyID(Integer.parseInt(tfBuscarUsuario.getText()));
+                ServerSQL newServerSQL = new ServerSQL();
+                ResultSet rs = newServerSQL.getUserbyID(Integer.parseInt(tfBuscarUsuario.getText()));
                 rs.next();
-
+                //carga de lo archivos
+                this.id = Integer.parseInt(rs.getString("id"));
                 tfNombre.setText(rs.getString("nombre"));
                 tfApellido.setText(rs.getString("apellido"));
-                tfImagen.setText(rs.getString("local_image"));
-                twitterName.setText(rs.getString("twitter_user"));
-                tfTwitterUsername.setText(rs.getString("twitter_user"));
-                tfUltimaCompra.setText(rs.getString("ultima_compra"));
-                String path1 = rs.getString("twitter_image");
-                System.out.println(path1);
-                Image img = new Image(path1);
-                imagenTwitter.setImage(img);
-                String path2 = rs.getString("local_image");
+                tfImagen.setText(rs.getString("limage"));
+                twitterName.setText(rs.getString("twuser"));
+                tfTwitterUsername.setText(rs.getString("twuser"));
+                tfUltimaCompra.setText(rs.getString("ucompra"));
+
+                imagenTwitter.setImage(null);
+                String path1 = rs.getString("twimage");
+                //System.out.println(path1);
+                if(!path1.isEmpty()){
+                    Image img = new Image(path1);
+                    imagenTwitter.setImage(img);
+
+                }
+
+                imagenUsuario.setImage(null);
+                String path2 = rs.getString("limage");
                 path2 = "file:"+ path2.replace("\\", "/");
-                System.out.println(path2);
-                Image img1 = new Image(path2);
-                imagenUsuario.setImage(img1);
-                String fecha[] = rs.getString("fecha_nacimiento").split("-");
+                //System.out.println(path2);
+                if(!path2.isEmpty()) {
+                    Image img1 = new Image(path2);
+                    imagenUsuario.setImage(img1);
+                }
+
+                String fecha[] = rs.getString("fdate").split("-");
                 fechaNacimiento.setValue(LocalDate.of(Integer.parseInt(fecha[0]), Integer.parseInt(fecha[1]), Integer.parseInt(fecha[2])));
                 if(rs.getString("tiene_creditos").equals("t")){
                     creditoSwitch.setSelected (true);
@@ -136,15 +163,38 @@ public class verClienteSceneController implements Initializable{
                 else{
                     creditoSwitch.setSelected (false);
                 }
-                tfMontoCredito.setText(rs.getString("cant_creditos"));
-                cb_Ocupacion.getSelectionModel().select( Integer.parseInt(rs.getString("id_ocupacio"))-1);
-                cb_Banco.getSelectionModel().select( Integer.parseInt(rs.getString("id_ocupacio"))-1);
-                cb_Departamento.getSelectionModel().select( Integer.parseInt(rs.getString("id_ocupacio"))-1);
-                cb_Categoria.getSelectionModel().select( Integer.parseInt(rs.getString("id_ocupacio"))-1);
-                cb_Sucursal.getSelectionModel().select( Integer.parseInt(rs.getString("id_sucursal"))-1);
-
-
+                tfMontoCredito.setText(rs.getString("creditos"));
+                cb_Ocupacion.getSelectionModel().select(rs.getString("ocupacion"));
+                cb_Banco.getSelectionModel().select( rs.getString("banco"));
+                cb_Departamento.getSelectionModel().select(rs.getString("departamento"));
+                cb_Categoria.getSelectionModel().select( rs.getString("categoria"));
+                cb_Sucursal.getSelectionModel().select( rs.getString("sucursal"));
                 scrollPaneFields.setVisible(true);
+
+                //para valores dinamicos
+                JSONParser parser = new JSONParser();
+
+                try {
+
+                    Object obj = parser.parse(rs.getString("otros"));
+                    JSONObject jsonObject = (JSONObject) obj;
+                    // loop array
+                    for(Iterator iterator = jsonObject.keySet().iterator(); iterator.hasNext();) {
+                        String key = (String) iterator.next();
+                        String value = (String) jsonObject.get(key);
+                        regnerarCamposDinamicos(key,value);
+                    }
+
+                }
+                catch (Exception e){
+                    System.out.println(e);
+                }
+                rs.close();
+                newServerSQL.closeConnectionToServer();
+
+                //poner lo de los tweets
+
+
             }
             catch (Exception e){
                 System.out.println(e);
@@ -181,6 +231,7 @@ public class verClienteSceneController implements Initializable{
         creditoSwitch.setDisable(false);
         tfMontoCredito.setEditable(true);
         creditoSwitch.setDisable(false);
+        fieldsList.setEditable(true);
         //for de los campos variables
 
     }
@@ -213,6 +264,80 @@ public class verClienteSceneController implements Initializable{
         tfMontoCredito.setEditable(false);
         fechaNacimiento.setDisable(true);
         creditoSwitch.setDisable(true);
+        fieldsList.setEditable(false);
+        fieldsList.setDisable(true);
+
+
+        //obtener datos y hacer update en la base de datos
+        ServerSQL newServerSQL = new ServerSQL();
+        String nombre = tfNombre.getText();
+        String apeliido = tfApellido.getText();
+        //fecha de nacimieto
+        Date date = Date.valueOf(fechaNacimiento.getValue().toString());
+        String twitterUser;
+        if (tfTwitterUsername.getText().contains("@")){
+            twitterUser = tfTwitterUsername.getText().replace("@","");
+        }
+        else {
+            twitterUser = tfTwitterUsername.getText();
+        }
+        String rutaimagenLocal = tfImagen.getText();
+        String rutaTwitter;
+        if(!tfTwitterUsername.getText().isEmpty()) {
+            ConnectionToTwitter connectionToTwitter = new ConnectionToTwitter();
+            rutaTwitter = connectionToTwitter.getUserImageLink(twitterUser);
+        }
+        else{
+            rutaTwitter = "";
+        }
+        // verificar que esto no sea null
+        String depto = cb_Departamento.getSelectionModel().getSelectedItem();
+        String ocupacion = cb_Ocupacion.getSelectionModel().getSelectedItem();
+        String banco = cb_Banco.getSelectionModel().getSelectedItem();
+        String sucursal = cb_Sucursal.getSelectionModel().getSelectedItem();
+        String categoria = cb_Categoria.getSelectionModel().getSelectedItem();
+        double ultcompra;
+        if(!tfUltimaCompra.getText().isEmpty()) {
+            ultcompra = Double.parseDouble(tfUltimaCompra.getText());
+        }
+        else {
+            ultcompra = 0;
+        }
+        boolean haveCredito= creditoSwitch.isSelected();
+        double cantCredito;
+        if(!tfMontoCredito.getText().isEmpty()) {
+            cantCredito = Double.parseDouble(tfMontoCredito.getText());
+        }
+        else {
+            cantCredito = 0;
+        }
+        //loop para campos dinamicos
+        //aca se leeran multiples campos
+        //se crea el json
+        JSONObject obj = new JSONObject();
+
+        items = fieldsList.getItems();
+        for (HBox h:items) {
+            VBox v = (VBox) h.getChildren().get(0);
+            Label label = (Label) v.getChildren().get(0);
+            String nombreCampo = label.getText();
+
+            //Obtiene el nombre del nuevo campo
+            nombreCampo = nombreCampo.replace(": ", "");
+            TextField textField = (TextField) h.getChildren().get(1);
+
+            //Obtiene el contenido del textfield
+            String contenidoCampo = textField.getText();
+            obj.put(nombreCampo, contenidoCampo);
+        }
+
+
+        //hacer update en la bae de datos
+        newServerSQL.updateCliente (nombre,apeliido,date, twitterUser,rutaimagenLocal,rutaTwitter, depto, ocupacion, banco, sucursal, categoria , ultcompra,haveCredito, cantCredito, this.id, obj);
+        newServerSQL.closeConnectionToServer();
+
+
+
     }
 
     //Boton "Eliminar" que permite eliminar un cliente
@@ -231,6 +356,9 @@ public class verClienteSceneController implements Initializable{
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == ButtonType.OK){
             // ... user chose OK
+            // se elimina de la base de datos
+            serverSQL.deleteUserbyID(this.id);
+
             Alert alert1 = new Alert(Alert.AlertType.INFORMATION);
             alert1.setTitle("Confirmacion");
             alert1.setHeaderText(null);
@@ -286,6 +414,31 @@ public class verClienteSceneController implements Initializable{
     }
     @FXML
     ScrollPane scrollPaneFields;
+
+    public void regnerarCamposDinamicos(String campo, String data){
+        fieldsList.setMinHeight(fieldsList.getHeight()+73);
+        Label s = new Label();
+        Font f = new Font(16);
+        s.setFont(f);
+        VBox vbox = new VBox();
+        vbox.setMaxWidth(200);
+        vbox.setPrefWidth(200);
+        s.setText(campo + ": ");
+        vbox.getChildren().add(s);
+        HBox hbox = new HBox();
+        hbox.setStyle("-fx-padding: 10 0 20 0;");
+        TextField myTextField = new TextField();
+        myTextField.setMaxWidth(267);
+        myTextField.setPrefWidth(267);;
+        myTextField.setFont(f);
+        myTextField.setText(data);
+        hbox.getChildren().add(vbox);
+        hbox.getChildren().add(myTextField);
+        fieldsList.getItems().add(hbox);
+
+    }
+
+
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
