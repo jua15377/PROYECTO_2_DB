@@ -213,6 +213,7 @@ public class ServerSQL {
                 rs = st.executeQuery("SELECT * FROM "+tabla + " ORDER BY " + filtro);
             }else{
                 Statement st = c.createStatement();
+                System.out.println("Orden: "+orden);
                 if(orden.equals("Ascendente")){
                     orden = "ASC";
                 }else{

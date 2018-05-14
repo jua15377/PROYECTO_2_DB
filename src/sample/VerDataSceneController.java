@@ -24,7 +24,7 @@ public class VerDataSceneController implements Initializable{
     ComboBox<String> cb_filtro;
 
     @FXML
-    ComboBox cb_orden;
+    ComboBox<String> cb_orden;
 
     @FXML
     Button buscarButton;
@@ -48,7 +48,7 @@ public class VerDataSceneController implements Initializable{
             if(cb_orden.getSelectionModel().getSelectedIndex() == -1){
                 orden = "-None-";
             }else{
-                orden = cb_filtro.getSelectionModel().getSelectedItem();
+                orden = cb_orden.getSelectionModel().getSelectedItem();
             }
             ResultSet rs = serverSQL.viewDataFromTable(tabla, filtro, orden);
             table.getColumns().clear();
