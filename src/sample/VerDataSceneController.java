@@ -7,7 +7,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import manejador.ServerSQL;
-
 import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;

@@ -1,6 +1,5 @@
 package sample;
 
-//import com.sun.org.apache.xml.internal.security.Init;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
@@ -10,7 +9,6 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import manejador.ServerSQL;
-
 import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -33,10 +31,67 @@ public class ModificarCatalogoSceneController implements Initializable{
     Button guardarButton;
 
     @FXML
-    void guardarButtonAction(){
-        ObservableList<Catalogo> data = table.getItems();
-        for (Catalogo c:data) {
-            System.out.println(c.getId() + ", " + c.getNombre());
+    void guardarButtonAction() throws SQLException {
+        TextInputDialog dialog = new TextInputDialog("Dato a eliminar");
+        dialog.setTitle("Eliminar dato");
+        dialog.setHeaderText(null);
+        dialog.setContentText("Ingrese el ID del dato a eliminar:");
+        // Traditional way to get the response value.
+        Optional<String> result = dialog.showAndWait();
+        if (result.isPresent()){
+            boolean exists = false;
+            if(currentCatalog.equals("banco")){
+                ObservableList<Banco> data = table.getItems();
+                for (Banco b:data) {
+                    if(b.getId_banco().equals(result.get())){
+                        exists = true;
+                    }
+                }
+                if(exists == true){
+                    serverSQL.deleteFromCatalog(currentCatalog, "id_banco", result.get());
+                }
+            }else if(currentCatalog.equals("categoria_producto")){
+                ObservableList<Categoria> data = table.getItems();
+                for (Categoria c:data) {
+                    if(c.getId_categoria().equals(result.get())){
+                        exists = true;
+                    }
+                }
+                if(exists == true){
+                    serverSQL.deleteFromCatalog(currentCatalog, "id_categoria", result.get());
+                }
+            }else if(currentCatalog.equals("ocupacion")){
+                ObservableList<Ocupacion> data = table.getItems();
+                for (Ocupacion o:data) {
+                    if(o.getId_ocupacion().equals(result.get())){
+                        exists = true;
+                    }
+                }
+                if(exists == true){
+                    serverSQL.deleteFromCatalog(currentCatalog, "id_ocupacion", result.get());
+                }
+            }else if(currentCatalog.equals("sucursal")){
+                ObservableList<Sucursal> data = table.getItems();
+                for (Sucursal s:data) {
+                    if(s.getId_sucursal().equals(result.get())){
+                        exists = true;
+                    }
+                }
+                if(exists == true){
+                    serverSQL.deleteFromCatalog(currentCatalog, "id_sucursal", result.get());
+                }
+            }
+            if(exists==false){
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText(null);
+                alert.setContentText("No existe ese elemento dentro del catalogo.");
+
+                alert.showAndWait();
+            }else{
+                refresh();
+                catalogoListener();
+            }
         }
     }
 
@@ -45,39 +100,67 @@ public class ModificarCatalogoSceneController implements Initializable{
 
     @FXML
     void nuevoButtonAction() throws SQLException {
-        TextInputDialog dialog = new TextInputDialog("Nuevo campo");
-        dialog.setTitle("Nuevo campo");
+        TextInputDialog dialog = new TextInputDialog("Nuevo dato");
+        dialog.setTitle("Nuevo dato");
+        dialog.setHeaderText(null);
         dialog.setContentText("Ingrese el nuevo valor:");
 
         // Traditional way to get the response value.
         Optional<String> result = dialog.showAndWait();
         if (result.isPresent()){
-
-            ObservableList<Catalogo> data = table.getItems();
-            String datos = "("+data.size() +", '" + result.get() + "')";
-            serverSQL.insertCatalog(currentCatalog, datos);
-            //table.getItems().add(new Catalogo(""+data.size(), "nuevo"));
+            if(currentCatalog.equals("banco")){
+                ObservableList<Banco> data = table.getItems();
+                int id = 0;
+                for (Banco b:data) {
+                    if(Integer.parseInt(b.getId_banco()) >= id){
+                        id = Integer.parseInt(b.getId_banco());
+                    }
+                }
+                id++;
+                String datos = "("+id+", '" + result.get() + "')";
+                serverSQL.insertCatalog(currentCatalog, datos);
+            }else if(currentCatalog.equals("categoria_producto")){
+                ObservableList<Categoria> data = table.getItems();
+                int id = 0;
+                for (Categoria b:data) {
+                    if(Integer.parseInt(b.getId_categoria()) >= id){
+                        id = Integer.parseInt(b.getId_categoria());
+                    }
+                }
+                id++;
+                String datos = "("+id +", '" + result.get() + "')";
+                serverSQL.insertCatalog(currentCatalog, datos);
+            }else if(currentCatalog.equals("ocupacion")){
+                ObservableList<Ocupacion> data = table.getItems();
+                int id = 0;
+                for (Ocupacion b:data) {
+                    if(Integer.parseInt(b.getId_ocupacion()) >= id){
+                        id = Integer.parseInt(b.getId_ocupacion());
+                    }
+                }
+                id++;
+                String datos = "("+id +", '" + result.get() + "')";
+                serverSQL.insertCatalog(currentCatalog, datos);
+            }else if(currentCatalog.equals("sucursal")){
+                ObservableList<Sucursal> data = table.getItems();
+                int id = 0;
+                for (Sucursal b:data) {
+                    if(Integer.parseInt(b.getId_sucursal()) >= id){
+                        id = Integer.parseInt(b.getId_sucursal());
+                    }
+                }
+                id++;
+                String datos = "("+id +", '" + result.get() + "')";
+                serverSQL.insertCatalog(currentCatalog, datos);
+            }
             refresh();
             catalogoListener();
-            //verificar que no exista, usuario anadido con exito
-
-            //System.out.println(datos);
-            //System.out.println("Your name: " + result.get());
-
         }
-        //catalogoListener();
-
-        // The Java 8 way to get the response value (with lambda expression).
-        //result.ifPresent(name -> System.out.println("Your name: " + name));
-
-        //ObservableList<Catalogo> data = table.getItems();
-
     }
 
     public void refresh(){
         table.getItems().clear();
     }
-
 
     void fillCatalogos(){
         cb_Catalogo.getItems().addAll("ocupacion", "banco", "sucursal", "categoria_producto");
@@ -88,7 +171,6 @@ public class ModificarCatalogoSceneController implements Initializable{
         ArrayList<String> ids =new ArrayList<>();
         guardarButton.setDisable(false);
         nuevoButton.setDisable(false);
-        //if(!cb_Catalogo.getSelectionModel().getSelectedItem().toString().equals(currentCatalog)){
             //quita las columnas actuales de la tabla
             table.getColumns().clear();
             table.setEditable(true);
@@ -119,8 +201,10 @@ public class ModificarCatalogoSceneController implements Initializable{
             try {
                 if(currentCatalog.equals("banco")){
                     while(rs.next()){
-                        dataBanco.add(new Banco(rs.getString("id_banco"), rs.getString("banco")));
-                        ids.add(rs.getString("id_banco")+","+ rs.getString("banco"));
+                        if(!rs.getString("id_banco").equals("0")){
+                            dataBanco.add(new Banco(rs.getString("id_banco"), rs.getString("banco")));
+                            ids.add(rs.getString("id_banco")+","+ rs.getString("banco"));
+                        }
                     }
                     ObservableList<TableColumn> t = table.getColumns();
                     for (TableColumn tableColumn:t) {
@@ -147,8 +231,10 @@ public class ModificarCatalogoSceneController implements Initializable{
                 }else if(currentCatalog.equals("categoria_producto")){
                     //si escoge el catalogo de categoria_producto
                     while(rs.next()){
-                        dataCategoria.add(new Categoria(rs.getString("id_categoria"), rs.getString("nombre_cat")));
-                        ids.add(rs.getString("id_categoria")+","+ rs.getString("nombre_cat"));
+                        if(!rs.getString("id_categoria").equals("0")){
+                            dataCategoria.add(new Categoria(rs.getString("id_categoria"), rs.getString("nombre_cat")));
+                            ids.add(rs.getString("id_categoria")+","+ rs.getString("nombre_cat"));
+                        }
                     }
                     ObservableList<TableColumn> t = table.getColumns();
                     for (TableColumn tableColumn:t) {
@@ -174,9 +260,11 @@ public class ModificarCatalogoSceneController implements Initializable{
                     table.setItems(dataCategoria);
                 }else if(currentCatalog.equals("ocupacion")){
                     while(rs.next()){
-                        Ocupacion c = new Ocupacion(rs.getString("id_ocupacion"), rs.getString("nombre_ocupacion"));
-                        dataOcupacion.add(c);
-                        ids.add(rs.getString("id_ocupacion")+","+ rs.getString("nombre_ocupacion"));
+                        if(!rs.getString("id_ocupacion").equals("0")){
+                            Ocupacion c = new Ocupacion(rs.getString("id_ocupacion"), rs.getString("nombre_ocupacion"));
+                            dataOcupacion.add(c);
+                            ids.add(rs.getString("id_ocupacion")+","+ rs.getString("nombre_ocupacion"));
+                        }
                     }
                     ObservableList<TableColumn> t = table.getColumns();
                     for (TableColumn tableColumn:t) {
@@ -203,8 +291,10 @@ public class ModificarCatalogoSceneController implements Initializable{
                     table.setItems(dataOcupacion);
                 }else if(currentCatalog.equals("sucursal")){
                     while(rs.next()){
-                        dataSucursal.add(new Sucursal(rs.getString("id_sucursal"), rs.getString("nombre_sucursal")));
-                        ids.add(rs.getString("id_sucursal")+","+ rs.getString("nombre_sucursal"));
+                        if(!rs.getString("id_sucursal").equals("0")){
+                            dataSucursal.add(new Sucursal(rs.getString("id_sucursal"), rs.getString("nombre_sucursal")));
+                            ids.add(rs.getString("id_sucursal")+","+ rs.getString("nombre_sucursal"));
+                        }
                     }
                     ObservableList<TableColumn> t = table.getColumns();
                     for (TableColumn tableColumn:t) {
@@ -233,7 +323,6 @@ public class ModificarCatalogoSceneController implements Initializable{
                 e.printStackTrace();
             }
             table.setVisible(true);
-        //}
     }
 
     @Override

@@ -4,7 +4,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -12,16 +11,18 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
+import manejador.ConnectionToTwitter;
+import manejador.ServerSQL;
 import org.controlsfx.control.ToggleSwitch;
+import org.json.simple.JSONObject;
 
 import java.io.File;
 import java.net.URL;
 import java.sql.Date;
-import java.util.*;
-import manejador.*;
-import org.json.simple.JSONObject;
-
-import javax.xml.crypto.Data;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+import java.util.ResourceBundle;
 
 public class agregarClienteController implements Initializable{
     private ServerSQL  serverSQL = new ServerSQL();

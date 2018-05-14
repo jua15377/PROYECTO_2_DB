@@ -282,6 +282,17 @@ public class ServerSQL {
         }
     }
 
+    public void deleteFromCatalog(String tabla, String columna, String valor){
+        try{
+            PreparedStatement st = c.prepareStatement("DELETE FROM "+ tabla + " WHERE " + columna + " = " + valor);
+            st.executeUpdate();
+            st.close();
+        }catch (SQLException e){
+            System.out.println("Error durante la ejecuion de query");
+            System.out.println(e);
+        }
+    }
+
     public ResultSet executeQuery (String query){
         try{
             ResultSet rs;
