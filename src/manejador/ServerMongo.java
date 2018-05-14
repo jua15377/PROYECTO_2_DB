@@ -1,6 +1,9 @@
 package manejador;
 
 
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBCollection;
+import com.mongodb.DBCursor;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
@@ -9,6 +12,8 @@ import org.bson.Document;
 import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import static com.mongodb.client.model.Filters.eq;
 
 public class ServerMongo {
     Credenciales credenciales = new Credenciales();
@@ -34,6 +39,25 @@ public class ServerMongo {
     }
     public void closeConnection(){
         mongoClient.close();
+    }
+
+    public void deleteOneFromKey(String key, String userName){
+
+        try {
+            collection.deleteOne(eq(key, userName));
+        }
+        catch (Exception e){
+            System.out.println("Error en la conexion con servidor Mongo");
+            System.out.println(e);
+
+        }
+
+    }
+
+    public Document findADocument(String key, String value){
+        Document  myDoc = collection.find(eq(key, value)).first();
+        System.out.println(myDoc.toJson());
+        return myDoc;
     }
 
 

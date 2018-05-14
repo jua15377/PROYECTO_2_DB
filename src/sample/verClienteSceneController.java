@@ -10,21 +10,20 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import org.bson.Document;
 import org.controlsfx.control.ToggleSwitch;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import javax.print.Doc;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.time.LocalDate;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Optional;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class verClienteSceneController implements Initializable{
     private ServerSQL serverSQL = new ServerSQL();
@@ -79,7 +78,7 @@ public class verClienteSceneController implements Initializable{
     ListView fieldsList;
 
     @FXML
-    ListView tweetsList;
+    ListView<String> tweetsList;
 
     @FXML
     Label twitterName;
@@ -144,10 +143,11 @@ public class verClienteSceneController implements Initializable{
                 rs.next();
                 //carga de lo archivos
                 this.id = Integer.parseInt(rs.getString("id"));
+                //limpiar lista de tweets
                 tfNombre.setText(rs.getString("nombre"));
                 tfApellido.setText(rs.getString("apellido"));
                 tfImagen.setText(rs.getString("limage"));
-                twitterName.setText(rs.getString("twuser"));
+                twitter_id.setText("@"+rs.getString("twuser"));
                 tfTwitterUsername.setText(rs.getString("twuser"));
                 tfUltimaCompra.setText(rs.getString("ucompra"));
 
@@ -207,6 +207,30 @@ public class verClienteSceneController implements Initializable{
                 newServerSQL.closeConnectionToServer();
 
                 //poner lo de los tweets
+                //pomiendo info en los labels
+                if(!tfTwitterUsername.getText().isEmpty()) {
+                    ServerMongo serverMongo = new ServerMongo();
+                    Document doc = serverMongo.findADocument("_id",tfTwitterUsername.getText());
+
+                    twitterName.setText(doc.get("name").toString());
+                    twitter_descripcion.setText(doc.get("descripcion").toString());
+                    twitter_locacion.setText(doc.get("locacion").toString());
+                    cant_followers.setText(doc.get("seguidores").toString());
+                    cant_tweets.setText(doc.get("cantidadTweets").toString());
+
+                    ArrayList<Document> tweets = (ArrayList<Document>) doc.get("tweets");
+
+                    tweetsList.getItems().clear();
+                    for (Document d: tweets){
+                        //System.out.println(d.get("texto").toString());
+                        //System.out.println(d.get("fecha").toString());
+                        String s = d.get("fecha").toString() + d.get("texto").toString();
+                        tweetsList.getItems().add(s);
+
+                    }
+
+
+                }
 
 
             }
@@ -352,6 +376,11 @@ public class verClienteSceneController implements Initializable{
         newServerSQL.updateCliente (nombre,apeliido,date, twitterUser,rutaimagenLocal,rutaTwitter, depto, ocupacion, banco, sucursal, categoria , ultcompra,haveCredito, cantCredito, this.id, obj);
         newServerSQL.closeConnectionToServer();
 
+        //insertando twetes en el servidor
+        if(!tfTwitterUsername.getText().isEmpty()) {
+            ConnectionToTwitter connectionToTwitter = new ConnectionToTwitter();
+            connectionToTwitter.updateTweets(tfTwitterUsername.getText());
+        }
 
 
     }
@@ -374,6 +403,12 @@ public class verClienteSceneController implements Initializable{
             // ... user chose OK
             // se elimina de la base de datos
             serverSQL.deleteUserbyID(this.id);
+            //eliminar de twitter
+            if(!tfTwitterUsername.getText().isEmpty()) {
+                ServerMongo serverMongo = new ServerMongo();
+                serverMongo.deleteOneFromKey("_id", tfTwitterUsername.getText());
+                serverMongo.closeConnection();
+            }
 
             Alert alert1 = new Alert(Alert.AlertType.INFORMATION);
             alert1.setTitle("Confirmacion");
