@@ -230,6 +230,7 @@ public class verClienteSceneController implements Initializable{
         //habilitar los componentes
         guardarButton.setDisable(false);
         modificarButton.setDisable(true);
+        nuevoCampoButton.setDisable(false);
         tfNombre.setEditable(true);
         tfApellido.setEditable(true);
         tfImagen.setEditable(true);
@@ -262,6 +263,7 @@ public class verClienteSceneController implements Initializable{
         //guardar los cambios hechos sobre un cliente
         guardarButton.setDisable(true);
         modificarButton.setDisable(false);
+        nuevoCampoButton.setDisable(true);
         tfNombre.setEditable(false);
         tfApellido.setEditable(false);
         tfImagen.setEditable(false);
@@ -438,7 +440,7 @@ public class verClienteSceneController implements Initializable{
     ScrollPane scrollPaneFields;
 
     public void regnerarCamposDinamicos(String campo, String data){
-        fieldsList.setMinHeight(fieldsList.getHeight()+73);
+        fieldsList.setMinHeight(fieldsList.getHeight()+111);
         Label s = new Label();
         Font f = new Font(16);
         s.setFont(f);

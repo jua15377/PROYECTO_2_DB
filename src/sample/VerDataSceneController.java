@@ -66,7 +66,7 @@ public class VerDataSceneController implements Initializable{
             try {
                 if(tabla.equals("cliente")){
                     while(rs.next()){
-                        dataCliente.add(new Cliente(rs.getString("id"), rs.getString("nombre"), rs.getString("apellido"), rs.getString("fecha_nacimiento"), rs.getString("twitter_user"), rs.getString("twitter_image"), rs.getString("local_image"), rs.getString("id_departamento"), rs.getString("id_ocupacio"), rs.getString("id_banco"), rs.getString("sucursal_favorita"), rs.getString("id_categoria_favorita"), rs.getString("ultima_compra"), rs.getString("tiene_creditos"), rs.getString("cant_creditos"), ""));
+                        dataCliente.add(new Cliente(rs.getString("id"), rs.getString("nombre"), rs.getString("apellido"), rs.getString("fecha_nacimiento"), rs.getString("twitter_user"), rs.getString("twitter_image"), rs.getString("local_image"), rs.getString("id_departamento"), rs.getString("id_ocupacio"), rs.getString("id_banco"), rs.getString("sucursal_favorita"), rs.getString("id_categoria_favorita"), rs.getString("ultima_compra"), rs.getString("tiene_creditos"), rs.getString("cant_creditos"), rs.getString("otros")));
                     }
                     ObservableList<TableColumn> t = table.getColumns();
                     for (TableColumn tableColumn:t) {
