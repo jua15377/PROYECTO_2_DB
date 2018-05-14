@@ -169,99 +169,140 @@ public class agregarClienteController implements Initializable{
     }
 
     public void addButtonAction(){
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Agregar usuario");
-        alert.setHeaderText(null);
-        alert.setContentText("Esta seguro de agregar este usuario?");
+        if(tfNombre.getText().equals("")){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error Dialog");
+            alert.setHeaderText("Houston, tenemos un problema...");
+            alert.setContentText("Porfavor, selecciona una categoria.");
+
+            alert.showAndWait();
+        }else
+        if(cb_Categoria.getSelectionModel().getSelectedIndex() == -1){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error Dialog");
+            alert.setHeaderText("Houston, tenemos un problema...");
+            alert.setContentText("Porfavor, selecciona una categoria.");
+
+            alert.showAndWait();
+        }else if(cb_Sucursal.getSelectionModel().getSelectedIndex() == -1){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error Dialog");
+            alert.setHeaderText("Houston, tenemos un problema...");
+            alert.setContentText("Porfavor, selecciona una sucursal.");
+
+            alert.showAndWait();
+        }else if(cb_Banco.getSelectionModel().getSelectedIndex() == -1){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error Dialog");
+            alert.setHeaderText("Houston, tenemos un problema...");
+            alert.setContentText("Porfavor, selecciona un banco.");
+
+            alert.showAndWait();
+        }else if(cb_Departamento.getSelectionModel().getSelectedIndex() == -1){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error Dialog");
+            alert.setHeaderText("Houston, tenemos un problema...");
+            alert.setContentText("Porfavor, selecciona un departamento.");
+
+            alert.showAndWait();
+        }else if(cb_Ocupacion.getSelectionModel().getSelectedIndex() == -1){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error Dialog");
+            alert.setHeaderText("Houston, tenemos un problema...");
+            alert.setContentText("Porfavor, selecciona una ocupacion.");
+
+            alert.showAndWait();
+        }else {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Agregar usuario");
+            alert.setHeaderText(null);
+            alert.setContentText("Esta seguro de agregar este usuario?");
 
 
-        Optional<ButtonType> result = alert.showAndWait();
-        if (result.get() == ButtonType.OK){
-            // ... user chose OK
-            // check here for special characters
-            ServerSQL newServerSQL = new ServerSQL();
-            String nombre = tfNombre.getText();
-            String apeliido = tfApellido.getText();
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.get() == ButtonType.OK) {
+                // ... user chose OK
+                // check here for special characters
+                ServerSQL newServerSQL = new ServerSQL();
+                String nombre = tfNombre.getText();
+                String apeliido = tfApellido.getText();
 
-            Date date = Date.valueOf(fechaNacimiento.getValue().toString());
+                Date date = Date.valueOf(fechaNacimiento.getValue().toString());
 
-            String twitterUser;
-            if (tfTwitterUsername.getText().contains("@")){
-                twitterUser = tfTwitterUsername.getText().replace("@","");
-            }
-            else {
-                twitterUser = tfTwitterUsername.getText();
-            }
-            String rutaimagenLocal = tfImagen.getText();
-            String rutaTwitter;
-            if(!tfTwitterUsername.getText().isEmpty()) {
-                ConnectionToTwitter connectionToTwitter = new ConnectionToTwitter();
-                 rutaTwitter = connectionToTwitter.getUserImageLink(twitterUser);
-            }
-            else{
-                 rutaTwitter = "";
-            }
-
-            // verificar que esto no sea null
-
-            String depto = cb_Departamento.getSelectionModel().getSelectedItem();
-            String ocupacion = cb_Ocupacion.getSelectionModel().getSelectedItem();
-            String banco = cb_Banco.getSelectionModel().getSelectedItem();
-            String sucursal = cb_Sucursal.getSelectionModel().getSelectedItem();
-            String categoria = cb_Categoria.getSelectionModel().getSelectedItem();
-            double ultcompra;
-            if(!tfUltimaCompra.getText().isEmpty()) {
-                ultcompra = Double.parseDouble(tfUltimaCompra.getText());
-            }
-            else {
-                ultcompra = 0;
-            }
-            boolean haveCredito= creditoSwitch.isSelected();
-            double cantCredito;
-            if(!tfMontoCredito.getText().isEmpty()) {
-                 cantCredito = Double.parseDouble(tfMontoCredito.getText());
-            }
-            else {
-                 cantCredito = 0;
-            }
-            //aca se leeran multiples campos
-            //se crea el json
-            JSONObject obj = new JSONObject();
-
-            items = fieldsList.getItems();
-            for (HBox h:items) {
-                VBox v = (VBox) h.getChildren().get(0);
-                Label label = (Label) v.getChildren().get(0);
-                String nombreCampo = label.getText();
-
-                //Obtiene el nombre del nuevo campo
-                nombreCampo = nombreCampo.replace(": ", "");
-                TextField textField = (TextField) h.getChildren().get(1);
-
-                //Obtiene el contenido del textfield
-                String contenidoCampo = textField.getText();
-                obj.put(nombreCampo, contenidoCampo);
-            }
-            if(!camposExtras.isEmpty()){
-                for (Map.Entry<String,String> s : camposExtras.entrySet() ){
-
+                String twitterUser;
+                if (tfTwitterUsername.getText().contains("@")) {
+                    twitterUser = tfTwitterUsername.getText().replace("@", "");
+                } else {
+                    twitterUser = tfTwitterUsername.getText();
                 }
-            }
-            //inserta en la bae de datos
-            newServerSQL.insertCliente(nombre,apeliido,date, twitterUser,rutaimagenLocal,rutaTwitter, depto, ocupacion, banco, sucursal, categoria , ultcompra,haveCredito, cantCredito, obj);
-            newServerSQL.closeConnectionToServer();
-            //buscar tweets
-            //insertando twetes en el servidor
-            if(!tfTwitterUsername.getText().isEmpty()) {
-                ConnectionToTwitter connectionToTwitter = new ConnectionToTwitter();
-                connectionToTwitter.getTweetsFromUserAndInsertOnMongo(tfTwitterUsername.getText());
-            }
+                String rutaimagenLocal = tfImagen.getText();
+                String rutaTwitter;
+                if (!tfTwitterUsername.getText().isEmpty()) {
+                    ConnectionToTwitter connectionToTwitter = new ConnectionToTwitter();
+                    rutaTwitter = connectionToTwitter.getUserImageLink(twitterUser);
+                } else {
+                    rutaTwitter = "";
+                }
 
-            Alert alert1 = new Alert(Alert.AlertType.INFORMATION);
-            alert1.setTitle("Confirmacion");
-            alert1.setHeaderText(null);
-            alert1.setContentText("Usuario agregado con exito!");
-            alert1.showAndWait();
+                // verificar que esto no sea null
+
+                String depto = cb_Departamento.getSelectionModel().getSelectedItem();
+                String ocupacion = cb_Ocupacion.getSelectionModel().getSelectedItem();
+                String banco = cb_Banco.getSelectionModel().getSelectedItem();
+                String sucursal = cb_Sucursal.getSelectionModel().getSelectedItem();
+                String categoria = cb_Categoria.getSelectionModel().getSelectedItem();
+                double ultcompra;
+                if (!tfUltimaCompra.getText().isEmpty()) {
+                    ultcompra = Double.parseDouble(tfUltimaCompra.getText());
+                } else {
+                    ultcompra = 0;
+                }
+                boolean haveCredito = creditoSwitch.isSelected();
+                double cantCredito;
+                if (!tfMontoCredito.getText().isEmpty()) {
+                    cantCredito = Double.parseDouble(tfMontoCredito.getText());
+                } else {
+                    cantCredito = 0;
+                }
+                //aca se leeran multiples campos
+                //se crea el json
+                JSONObject obj = new JSONObject();
+
+                items = fieldsList.getItems();
+                for (HBox h : items) {
+                    VBox v = (VBox) h.getChildren().get(0);
+                    Label label = (Label) v.getChildren().get(0);
+                    String nombreCampo = label.getText();
+
+                    //Obtiene el nombre del nuevo campo
+                    nombreCampo = nombreCampo.replace(": ", "");
+                    TextField textField = (TextField) h.getChildren().get(1);
+
+                    //Obtiene el contenido del textfield
+                    String contenidoCampo = textField.getText();
+                    obj.put(nombreCampo, contenidoCampo);
+                }
+                if (!camposExtras.isEmpty()) {
+                    for (Map.Entry<String, String> s : camposExtras.entrySet()) {
+
+                    }
+                }
+                //inserta en la bae de datos
+                newServerSQL.insertCliente(nombre, apeliido, date, twitterUser, rutaimagenLocal, rutaTwitter, depto, ocupacion, banco, sucursal, categoria, ultcompra, haveCredito, cantCredito, obj);
+                newServerSQL.closeConnectionToServer();
+                //buscar tweets
+                //insertando twetes en el servidor
+                if (!tfTwitterUsername.getText().isEmpty()) {
+                    ConnectionToTwitter connectionToTwitter = new ConnectionToTwitter();
+                    connectionToTwitter.getTweetsFromUserAndInsertOnMongo(tfTwitterUsername.getText());
+                }
+
+                Alert alert1 = new Alert(Alert.AlertType.INFORMATION);
+                alert1.setTitle("Confirmacion");
+                alert1.setHeaderText(null);
+                alert1.setContentText("Usuario agregado con exito!");
+                alert1.showAndWait();
+            }
         }
     }
 
