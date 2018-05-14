@@ -19,6 +19,7 @@ import org.jfree.chart.renderer.category.BarRenderer;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.DefaultPieDataset;
 
+import javax.swing.text.html.ImageView;
 import java.io.File;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -34,6 +35,10 @@ public class ReportesSceneController {
 
     @FXML
     TableView table;
+
+
+    @FXML
+    ImageView imagen;
 
     @FXML
     void reporteListener(){
@@ -51,8 +56,6 @@ public class ReportesSceneController {
         final ObservableList<TopDeudores> dataOctavoR = FXCollections.observableArrayList();
         final ObservableList<EdadPorCategoria> dataNvenoR = FXCollections.observableArrayList();
         final ObservableList<UsuariosPorSucursal> dataDecimoR = FXCollections.observableArrayList();
-
-
 
 
         if(numero == 0){
