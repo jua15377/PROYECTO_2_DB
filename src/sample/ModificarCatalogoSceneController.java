@@ -167,6 +167,7 @@ public class ModificarCatalogoSceneController implements Initializable{
     }
 
     @FXML
+
     public void catalogoListener() throws SQLException {
         ArrayList<String> ids =new ArrayList<>();
         guardarButton.setDisable(false);

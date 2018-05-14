@@ -30,7 +30,8 @@ public class PostgreSQLJDBC {
 //
 //        System.out.println(obj.toString()+"\n\n\n\n");
 //        System.out.println(obj.toJSONString()+"\n\n\n\n");
-
-        connectionToTwitter.getTweetsFromUserAndInsertOnMongo("sebastian_g_c");
+        ServerMongo serverMongo = new ServerMongo();
+        //serverMongo.fullTextSearch("diego",false,false);
+        //serverMongo.fulltweetSearchTwo("usuario");
     }
 }
