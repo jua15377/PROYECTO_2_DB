@@ -1,6 +1,9 @@
 package manejador;
 
 
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBCollection;
+import com.mongodb.DBCursor;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
@@ -51,8 +54,10 @@ public class ServerMongo {
 
     }
 
-    public void findADocument(String key, String value){
-        
+    public Document findADocument(String key, String value){
+        Document  myDoc = collection.find(eq(key, value)).first();
+        System.out.println(myDoc.toJson());
+        return myDoc;
     }
 
 

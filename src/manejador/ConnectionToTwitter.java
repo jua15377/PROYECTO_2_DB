@@ -70,7 +70,7 @@ public class ConnectionToTwitter {
 
             }
 
-            doc.append("tweets", Arrays.asList(tweets));
+            doc.append("tweets", tweets);
             ServerMongo serverMongo = new ServerMongo();
             serverMongo.insertOn(doc);
             serverMongo.closeConnection();
