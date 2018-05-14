@@ -9,6 +9,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.image.Image;
 import manejador.ServerSQL;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartUtilities;
@@ -36,9 +37,8 @@ public class ReportesSceneController {
     @FXML
     TableView table;
 
-
     @FXML
-    ImageView imagen;
+    javafx.scene.image.ImageView imagen;
 
     @FXML
     void reporteListener(){
@@ -99,6 +99,11 @@ public class ReportesSceneController {
                 File BarChart = new File( path1 );
                 ChartUtilities.saveChartAsJPEG( BarChart , barChart , width , height );
 
+                path1 = "file:"+ path1.replace("\\", "/");
+                System.out.println(path1);
+                Image img = new Image(path1);
+                imagen.setImage(img);
+
             }catch (Exception e ){
                 e.printStackTrace();
             }
@@ -118,7 +123,7 @@ public class ReportesSceneController {
                 creditosCol.setCellValueFactory(new PropertyValueFactory<>("creditos_totales"));
                 table.getColumns().setAll(creditosCol);
                 table.setVisible(true);
-
+                imagen.setImage(null);
             }catch (Exception e ){
                 e.printStackTrace();
             }
@@ -159,6 +164,11 @@ public class ReportesSceneController {
                 File BarChart = new File( path1 );
                 ChartUtilities.saveChartAsJPEG( BarChart , barChart , width , height );
 
+                path1 = "file:"+ path1.replace("\\", "/");
+                System.out.println(path1);
+                Image img = new Image(path1);
+                imagen.setImage(img);
+
             }catch (Exception e ){
                 e.printStackTrace();
             }
@@ -181,7 +191,7 @@ public class ReportesSceneController {
                 clientesCol.setCellValueFactory(new PropertyValueFactory<>("clientes"));
                 table.getColumns().setAll(categoriaCol, clientesCol);
                 table.setVisible(true);
-
+                imagen.setImage(null);
             }catch (Exception e ){
                 e.printStackTrace();
             }
@@ -202,7 +212,7 @@ public class ReportesSceneController {
                 edadCol.setCellValueFactory(new PropertyValueFactory<>("edad_promedio"));
                 table.getColumns().setAll(edadCol);
                 table.setVisible(true);
-
+                imagen.setImage(null);
             }catch (Exception e ){
                 e.printStackTrace();
             }
@@ -244,6 +254,11 @@ public class ReportesSceneController {
                 path1 = path1.replace("\\", "/");
                 File pieChart = new File( path1 );
                 ChartUtilities.saveChartAsJPEG( pieChart , chart , width , height );
+
+                path1 = "file:"+ path1.replace("\\", "/");
+                System.out.println(path1);
+                Image img = new Image(path1);
+                imagen.setImage(img);
 
             }catch (Exception e ){
                 e.printStackTrace();
@@ -297,7 +312,7 @@ public class ReportesSceneController {
 
                 table.getColumns().setAll(nombreCol, apellidoCol, edadCol, departamentoCol, ocupacionCol, bancoCol, sucursalCol, categoriaCol);
                 table.setVisible(true);
-
+                imagen.setImage(null);
             }catch (Exception e ){
                 e.printStackTrace();
             }
@@ -350,7 +365,7 @@ public class ReportesSceneController {
 
                 table.getColumns().setAll(nombreCol, apellidoCol, edadCol, departamentoCol, ocupacionCol, bancoCol, sucursalCol, categoriaCol);
                 table.setVisible(true);
-
+                imagen.setImage(null);
             }catch (Exception e ){
                 e.printStackTrace();
             }
@@ -388,6 +403,11 @@ public class ReportesSceneController {
                 path1 = path1.replace("\\", "/");
                 File BarChart = new File( path1 );
                 ChartUtilities.saveChartAsJPEG( BarChart , barChart , width , height );
+
+                path1 = "file:"+ path1.replace("\\", "/");
+                System.out.println(path1);
+                Image img = new Image(path1);
+                imagen.setImage(img);
 
             }catch (Exception e ){
                 e.printStackTrace();
@@ -432,6 +452,11 @@ public class ReportesSceneController {
                 path1 = path1.replace("\\", "/");
                 File pieChart = new File( path1 );
                 ChartUtilities.saveChartAsJPEG( pieChart , chart , width , height );
+
+                path1 = "file:"+ path1.replace("\\", "/");
+                System.out.println(path1);
+                Image img = new Image(path1);
+                imagen.setImage(img);
 
             }catch (Exception e ){
                 e.printStackTrace();
