@@ -26,21 +26,18 @@ public class ServerMongo {
 
         }
         catch (Exception e){
-            System.out.println("Error en la conexion con Atlas");
+            System.out.println("Error en la conexion con servidor Mongo");
+            System.out.println(e);
+
         }
 
     }
     public void closeConnection(){
         mongoClient.close();
     }
-    public void insertOn(){
-        Document doc = new Document("_id",4)
-                .append("name", "MongoDB")
-                .append("type", "database")
-                .append("count", 1)
-                .append("versions", Arrays.asList("v3.2", "v3.0", "v2.6"))
-                .append("info", new Document("x", 203).append("y", 102));
-        collection.insertOne(doc);
 
+
+    public void insertOn(Document doc){
+        collection.insertOne(doc);
     }
 }
