@@ -229,6 +229,19 @@ public class ServerSQL {
         return null;
     }
 
+    public ResultSet viewDataFromCatalogo(String catalogo){
+        try{
+            ResultSet rs;
+            Statement st = c.createStatement();
+            rs = st.executeQuery("SELECT * FROM "+catalogo);
+            return rs;
+        }catch (SQLException e){
+            System.out.println("Error durante la ejecuion de query");
+            System.out.println(e);
+        }
+        return null;
+    }
+
     public ArrayList<String> viewColumnsFromTable(String table){
         try{
             PreparedStatement pstmt = c.prepareStatement("select * from " + table);
@@ -245,6 +258,22 @@ public class ServerSQL {
             System.out.println(e);
         }
         return null;
+    }
+
+    public void insertCatalog(String tabla, String datos){
+        try{
+            PreparedStatement pstmt = c.prepareStatement("INSERT INTO "+ tabla + " VALUES " + datos);
+            ResultSetMetaData meta = pstmt.getMetaData();
+            ArrayList<String> res = new ArrayList<>();
+            for (int i=1; i <= meta.getColumnCount(); i++)
+            {
+                //System.out.println("Column name: " + meta.getColumnName(i) + ", data type: " + meta.getColumnTypeName(i));
+                res.add(meta.getColumnName(i));
+            }
+        }catch (SQLException e){
+            System.out.println("Error durante la ejecuion de query");
+            System.out.println(e);
+        }
     }
 
 

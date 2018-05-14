@@ -9,12 +9,18 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import manejador.ServerSQL;
 
 import java.net.URL;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class ModificarCatalogoSceneController implements Initializable{
 
+    ServerSQL serverSQL = new ServerSQL();
     String currentCatalog;
     @FXML
     ComboBox cb_Catalogo;
@@ -38,53 +44,152 @@ public class ModificarCatalogoSceneController implements Initializable{
 
     @FXML
     void nuevoButtonAction(){
+
+        TextInputDialog dialog = new TextInputDialog("Nuevo campo");
+        dialog.setTitle("Nuevo campo");
+        dialog.setContentText("Ingrese el nuevo valor:");
+
+        // Traditional way to get the response value.
+        Optional<String> result = dialog.showAndWait();
+        if (result.isPresent()){
+            System.out.println("Your name: " + result.get());
+
+        }
+
+        // The Java 8 way to get the response value (with lambda expression).
+        //result.ifPresent(name -> System.out.println("Your name: " + name));
+
         ObservableList<Catalogo> data = table.getItems();
         table.getItems().add(new Catalogo(""+data.size(), "nuevo"));
     }
 
     void fillCatalogos(){
-        cb_Catalogo.getItems().addAll("Hola", "Adios", "Ste", "Men");
+        cb_Catalogo.getItems().addAll("ocupacion", "banco", "sucursal", "categoria_producto");
     }
 
     @FXML
-    void catalogoListener(){
+    void catalogoListener() throws SQLException {
         if(!cb_Catalogo.getSelectionModel().getSelectedItem().toString().equals(currentCatalog)){
+            //quita las columnas actuales de la tabla
+            table.getColumns().clear();
             table.setEditable(true);
-            //table.getColumns().clear();
+            //llamando al query que ejecuta la busqueda
+            ResultSet rs = serverSQL.viewDataFromCatalogo(cb_Catalogo.getSelectionModel().getSelectedItem().toString());
+
             currentCatalog = cb_Catalogo.getSelectionModel().getSelectedItem().toString();
-            table.setVisible(true);
-            //System.out.println("Entre aca");
-            TableColumn columnaID = new TableColumn("ID");
-            TableColumn columnaNombre = new TableColumn("Nombre");
-            table.getColumns().addAll(columnaID, columnaNombre);
 
-            final ObservableList<Catalogo> data = FXCollections.observableArrayList();
-
-            for(int i = 0; i<2 ;i++){
-                data.add(new Catalogo(""+i, "hola"));
+            //obteniendo la metadata del query ejecutado
+            ResultSetMetaData meta = null;
+            try {
+                meta = rs.getMetaData();
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
-            columnaID.setCellValueFactory(new PropertyValueFactory<Catalogo,String>("id"));
-            //columnaID.setCellFactory(TextFieldTableCell.forTableColumn());
-            /*columnaID.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent>() {
-                @Override
-                public void handle(TableColumn.CellEditEvent event) {
-                    ((Catalogo) event.getTableView().getItems().get(
-                            event.getTablePosition().getRow())
-                    ).setId(event.getNewValue().toString());
-                }
-            });*/
 
-            columnaNombre.setCellValueFactory(new PropertyValueFactory<Catalogo,String>("Nombre"));
-            columnaNombre.setCellFactory(TextFieldTableCell.forTableColumn());
-            columnaNombre.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent>() {
-                @Override
-                public void handle(TableColumn.CellEditEvent event) {
-                    ((Catalogo) event.getTableView().getItems().get(
-                            event.getTablePosition().getRow())
-                    ).setNombre(event.getNewValue().toString());
+            //agregrando las columnas correspondientes a la tabla
+            for (int i=1; i <= meta.getColumnCount(); i++) {
+                    TableColumn tableColumn = new TableColumn(meta.getColumnName(i));
+                    table.getColumns().add(tableColumn);
+            }
+
+            final ObservableList<Banco> dataBanco = FXCollections.observableArrayList();
+            final ObservableList<Ocupacion> dataOcupacion = FXCollections.observableArrayList();
+            final ObservableList<Categoria> dataCategoria = FXCollections.observableArrayList();
+            final ObservableList<Sucursal> dataSucursal = FXCollections.observableArrayList();
+
+            try {
+                if(currentCatalog.equals("banco")){
+                    while(rs.next()){
+                        dataBanco.add(new Banco(rs.getString("id_banco"), rs.getString("banco")));
+                    }
+                    ObservableList<TableColumn> t = table.getColumns();
+                    for (TableColumn tableColumn:t) {
+                        tableColumn.setCellValueFactory(new PropertyValueFactory<Banco,String>(tableColumn.getText()));
+                        if(!tableColumn.getText().contains("id")){
+                            tableColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+                            tableColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent>() {
+                                @Override
+                                public void handle(TableColumn.CellEditEvent event) {
+                                    ((Catalogo) event.getTableView().getItems().get(
+                                            event.getTablePosition().getRow())
+                                    ).setNombre(event.getNewValue().toString());
+
+                                }
+                            });
+                        }
+                    }
+                    table.setItems(dataBanco);
+                }else if(currentCatalog.equals("categoria_producto")){
+                    //si escoge el catalogo de categoria_producto
+                    while(rs.next()){
+                        dataCategoria.add(new Categoria(rs.getString("id_categoria"), rs.getString("nombre_cat")));
+                    }
+                    ObservableList<TableColumn> t = table.getColumns();
+                    for (TableColumn tableColumn:t) {
+                        tableColumn.setCellValueFactory(new PropertyValueFactory<Categoria,String>(tableColumn.getText()));
+                        if(!tableColumn.getText().contains("id")){
+                            tableColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+                            tableColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent>() {
+                                @Override
+                                public void handle(TableColumn.CellEditEvent event) {
+                                    ((Catalogo) event.getTableView().getItems().get(
+                                            event.getTablePosition().getRow())
+                                    ).setNombre(event.getNewValue().toString());
+
+                                }
+                            });
+                        }
+                    }
+                    table.setItems(dataCategoria);
+                }else if(currentCatalog.equals("ocupacion")){
+                    while(rs.next()){
+                        Ocupacion c = new Ocupacion(rs.getString("id_ocupacion"), rs.getString("nombre_ocupacion"));
+                        dataOcupacion.add(c);
+                    }
+                    ObservableList<TableColumn> t = table.getColumns();
+                    for (TableColumn tableColumn:t) {
+
+                        tableColumn.setCellValueFactory(new PropertyValueFactory<Ocupacion,String>(tableColumn.getText()));
+                        if(!tableColumn.getText().contains("id")){
+                            tableColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+                            tableColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent>() {
+                                @Override
+                                public void handle(TableColumn.CellEditEvent event) {
+                                    ((Catalogo) event.getTableView().getItems().get(
+                                            event.getTablePosition().getRow())
+                                    ).setNombre(event.getNewValue().toString());
+
+                                }
+                            });
+                        }
+                    }
+                    table.setItems(dataOcupacion);
+                }else if(currentCatalog.equals("sucursal")){
+                    while(rs.next()){
+                        dataSucursal.add(new Sucursal(rs.getString("id_sucursal"), rs.getString("nombre_sucursal")));
+                    }
+                    ObservableList<TableColumn> t = table.getColumns();
+                    for (TableColumn tableColumn:t) {
+                        tableColumn.setCellValueFactory(new PropertyValueFactory<Sucursal,String>(tableColumn.getText()));
+                        if(!tableColumn.getText().contains("id")){
+                            tableColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+                            tableColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent>() {
+                                @Override
+                                public void handle(TableColumn.CellEditEvent event) {
+                                    ((Catalogo) event.getTableView().getItems().get(
+                                            event.getTablePosition().getRow())
+                                    ).setNombre(event.getNewValue().toString());
+
+                                }
+                            });
+                        }
+                    }
+                    table.setItems(dataSucursal);
                 }
-            });
-            table.setItems(data);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            table.setVisible(true);
         }
     }
 
