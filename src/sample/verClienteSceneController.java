@@ -84,6 +84,20 @@ public class verClienteSceneController implements Initializable{
     @FXML
     Label twitterName;
 
+    @FXML
+    Label twitter_id;
+
+    @FXML
+    Label twitter_descripcion;
+
+    @FXML
+    Label twitter_locacion;
+
+    @FXML
+    Label cant_followers;
+
+    @FXML
+    Label cant_tweets;
 
     @FXML
     ImageView imagenUsuario;
@@ -367,6 +381,14 @@ public class verClienteSceneController implements Initializable{
             scrollPaneFields.setVisible(false);
             //set scrollpanel visible false.
         }
+    }
+
+    @FXML
+    Button nuevoCampoButton;
+
+    @FXML
+    void nuevoCampoButtonAction(){
+
     }
 
     @FXML

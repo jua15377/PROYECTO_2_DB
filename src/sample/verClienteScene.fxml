@@ -345,6 +345,11 @@
                                     <Font size="16.0" />
                                  </font>
                               </Button>
+                              <Button fx:id="nuevoCampoButton" disable="true" layoutX="10.0" layoutY="107.0" mnemonicParsing="false" onAction="#nuevoCampoButtonAction" prefHeight="37.0" prefWidth="152.0" text="Nuevo campo">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                              </Button>
                               <Button fx:id="eliminarButton" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#eliminarButtonAction" prefHeight="37.0" prefWidth="152.0" text="Eliminar">
                                  <font>
                                     <Font size="16.0" />
@@ -365,18 +370,55 @@
                                     <HBox prefHeight="100.0" prefWidth="200.0" spacing="20.0">
                                        <children>
                                           <ImageView fx:id="imagenTwitter" fitHeight="150.0" fitWidth="175.0" pickOnBounds="true" preserveRatio="true" />
-                                          <VBox alignment="CENTER" spacing="10.0">
+                                          <VBox alignment="CENTER_LEFT" spacing="10.0">
                                              <children>
-                                                <Label fx:id="twitterName" text="Username">
+                                                <Label fx:id="twitterName" text="twitter_name">
                                                    <font>
                                                       <Font size="24.0" />
                                                    </font>
                                                 </Label>
+                                                <Label fx:id="twitter_id" layoutX="10.0" layoutY="68.0" text="twiitter_id">
+                                                   <font>
+                                                      <Font size="18.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label fx:id="twitter_descripcion" layoutX="10.0" layoutY="94.0" text="twiitter_descripcion">
+                                                   <font>
+                                                      <Font size="14.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label fx:id="twitter_locacion" layoutX="10.0" layoutY="113.0" text="twiitter_locacion">
+                                                   <font>
+                                                      <Font size="14.0" />
+                                                   </font>
+                                                </Label>
+                                                <HBox prefHeight="100.0" prefWidth="200.0">
+                                                   <children>
+                                                      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+                                                         <children>
+                                                            <Label text="Followers" />
+                                                            <Label fx:id="cant_followers" text="cant_followers" />
+                                                         </children>
+                                                      </VBox>
+                                                      <VBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0">
+                                                         <children>
+                                                            <Label text="Cant. Tweets" />
+                                                            <Label fx:id="cant_tweets" text="cant_tweets" />
+                                                         </children>
+                                                      </VBox>
+                                                   </children>
+                                                   <padding>
+                                                      <Insets bottom="10.0" />
+                                                   </padding>
+                                                </HBox>
                                              </children>
                                           </VBox>
                                        </children>
                                     </HBox>
-                                    <ListView fx:id="tweetsList" prefHeight="678.0" prefWidth="777.0" />
+                                    <ListView fx:id="tweetsList" prefHeight="678.0" prefWidth="777.0">
+                                       <padding>
+                                          <Insets top="10.0" />
+                                       </padding></ListView>
                                  </children>
                               </VBox>
                            </content>
