@@ -17,7 +17,6 @@
          <children>
             <HBox alignment="CENTER_LEFT" spacing="10.0">
                <children>
-                  <FontAwesomeIcon iconName="SEARCH" size="1.5em" />
                   <Label text="Seleccione un reporte:">
                      <font>
                         <Font size="16.0" />
