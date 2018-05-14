@@ -19,6 +19,7 @@ import java.net.URL;
 import java.sql.Date;
 import java.util.*;
 import manejador.*;
+import org.json.simple.JSONObject;
 
 import javax.xml.crypto.Data;
 
@@ -178,7 +179,7 @@ public class agregarClienteController implements Initializable{
         if (result.get() == ButtonType.OK){
             // ... user chose OK
             // check here for special characters
-
+            ServerSQL newServerSQL = new ServerSQL();
             String nombre = tfNombre.getText();
             String apeliido = tfApellido.getText();
 
@@ -224,6 +225,8 @@ public class agregarClienteController implements Initializable{
                  cantCredito = 0;
             }
             //aca se leeran multiples campos
+            //se crea el json
+            JSONObject obj = new JSONObject();
 
             items = fieldsList.getItems();
             for (HBox h:items) {
@@ -237,7 +240,7 @@ public class agregarClienteController implements Initializable{
 
                 //Obtiene el contenido del textfield
                 String contenidoCampo = textField.getText();
-
+                obj.put(nombreCampo, contenidoCampo);
             }
             if(!camposExtras.isEmpty()){
                 for (Map.Entry<String,String> s : camposExtras.entrySet() ){
@@ -245,7 +248,8 @@ public class agregarClienteController implements Initializable{
                 }
             }
             //inserta en la bae de datos
-            serverSQL.insertCliente(nombre,apeliido,date, twitterUser,rutaimagenLocal,rutaTwitter, depto, ocupacion, banco, sucursal, categoria , ultcompra,haveCredito, cantCredito);
+            newServerSQL.insertCliente(nombre,apeliido,date, twitterUser,rutaimagenLocal,rutaTwitter, depto, ocupacion, banco, sucursal, categoria , ultcompra,haveCredito, cantCredito, obj);
+            newServerSQL.closeConnectionToServer();
             //buscar tweets
 
             Alert alert1 = new Alert(Alert.AlertType.INFORMATION);

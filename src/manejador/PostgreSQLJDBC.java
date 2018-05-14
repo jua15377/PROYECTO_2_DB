@@ -2,6 +2,7 @@ package manejador;
 
 import java.sql.Date;
 import java.sql.ResultSet;
+import org.json.simple.*;
 
 public class PostgreSQLJDBC {
     public static void main(String args[]) {
@@ -19,19 +20,15 @@ public class PostgreSQLJDBC {
         //serverMongo.closeConnection();
 //        ConnectionToTwitter connectionToTwitter = new ConnectionToTwitter();
 //        connectionToTwitter.getUserImageLink("geektenango");
+        JSONObject obj = new JSONObject();
+        obj.put("nombre1", "Malon");
+        obj.put("Apodo", 5);
+        JSONObject obj1 = new JSONObject();
+        obj1.put("nombre adentro", "Andrea");
+        obj1.put("booleano", false);
+        obj.put("otroOBjeto",obj1);
 
-        try {
-            ResultSet rs = serverSQL.getUserbyID(100);
-            while (rs.next()){
-                System.out.println(rs.getString(2));
-            }
-        }
-         catch (Exception e){
-            System.out.println(e);
-         }
-
-
-
-
+        System.out.println(obj.toString()+"\n\n\n\n");
+        System.out.println(obj.toJSONString()+"\n\n\n\n");
     }
 }
