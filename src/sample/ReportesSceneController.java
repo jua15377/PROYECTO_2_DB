@@ -4,7 +4,17 @@ import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableView;
 import manejador.ServerSQL;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartUtilities;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.CategoryPlot;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.renderer.category.BarRenderer;
+import org.jfree.data.category.DefaultCategoryDataset;
+import org.jfree.data.general.DefaultPieDataset;
+import org.jfree.data.general.PieDataset;
 
+import java.io.File;
 import java.sql.ResultSet;
 
 public class ReportesSceneController {
@@ -32,6 +42,37 @@ public class ReportesSceneController {
                             "FROM cliente c INNER JOIN sucursal s ON (c.sucursal_favorita = s.id_sucursal)\n" +
                             "GROUP BY nombre_sucursal";
             rs = serverSQL.executeQuery(query);
+
+            try {
+                DefaultCategoryDataset dataset = new DefaultCategoryDataset( );
+                while (rs.next()) {
+                    String nombre = rs.getString(1);
+
+                    dataset.addValue(rs.getDouble(2),nombre, nombre);
+                }
+
+                JFreeChart barChart = ChartFactory.createBarChart3D (
+                        "Ventas por tiendas",
+                        "Tiendas", "Ventas",
+                        dataset, PlotOrientation.VERTICAL,
+                        true, true, false);
+                CategoryPlot categoryPlot = barChart.getCategoryPlot();
+                BarRenderer br = (BarRenderer) categoryPlot.getRenderer();
+                br.setMaximumBarWidth(13); // set maximum width to 35% of chart
+                int width = 840;    /* Width of the image */
+                int height = 480;   /* Height of the image */
+
+
+                String path1 = System.getProperty("user.dir") + "/resources/ingreso_departamento.png";
+                path1 = path1.replace("\\", "/");
+                File BarChart = new File( path1 );
+                ChartUtilities.saveChartAsJPEG( BarChart , barChart , width , height );
+
+            }
+            catch(Exception e){
+                System.out.println(e);
+            }
+
         }
         else if (numero == 1){
             String query =  "SELECT  sum(cant_creditos) as creditos_totales\n" +
@@ -43,6 +84,35 @@ public class ReportesSceneController {
                             "FROM cliente c INNER JOIN departamento d ON (d.id_departamento = c.id_departamento)\n" +
                             "GROUP BY departamento";
             rs = serverSQL.executeQuery(query);
+
+            try {
+                DefaultCategoryDataset dataset = new DefaultCategoryDataset( );
+                while (rs.next()) {
+                    String nombre = rs.getString(1);
+
+                    dataset.addValue(rs.getDouble(2),nombre, nombre);
+                }
+
+                JFreeChart barChart = ChartFactory.createBarChart3D (
+                        "Usuarios por Departmanetos",
+                        "Departamento", "Usuarios",
+                        dataset, PlotOrientation.HORIZONTAL,
+                        true, true, false);
+
+                int width = 840;    /* Width of the image */
+                int height = 480;   /* Height of the image */
+
+                String path1 = System.getProperty("user.dir") + "/resources/cliente_depto.png";
+                path1 = path1.replace("\\", "/");
+                File BarChart = new File( path1 );
+                ChartUtilities.saveChartAsJPEG( BarChart , barChart , width , height );
+
+            }
+            catch(Exception e){
+                System.out.println(e);
+            }
+
+
         }
         else if (numero == 3){
             String query = "SELECT nombre_cat as categoria, count(*) as clientes\n" +
@@ -60,6 +130,33 @@ public class ReportesSceneController {
                             "FROM cliente c INNER JOIN banco b ON (b.id_banco = c.id_banco)\n" +
                             "GROUP BY banco";
             rs = serverSQL.executeQuery(query);
+            DefaultPieDataset dataset = new DefaultPieDataset( );
+            try {
+                while( rs.next( ) ) {
+                    dataset.setValue(
+                            rs.getString( 1 ) ,
+                            Double.parseDouble( rs.getString( 2 )));
+                }
+
+                JFreeChart chart = ChartFactory.createPieChart(
+                        "Ditribucion de los creditos en los bancos",   // chart title
+                        dataset,          // data
+                        true,             // include legend
+                        true,
+                        false );
+
+                int width = 560;    /* Width of the image */
+                int height = 370;   /* Height of the image */
+
+                String path1 = System.getProperty("user.dir") + "/resources/creditos_bancos.png";
+                path1 = path1.replace("\\", "/");
+                File pieChart = new File( path1 );
+                ChartUtilities.saveChartAsJPEG( pieChart , chart , width , height );
+                }
+                catch(Exception e){
+                    System.out.println(e);
+                }
+
         }
         else if (numero == 6){
             String query =  "SELECT nombre, apellido, (SELECT 2018 - extract(year FROM fecha_nacimiento)) as edad, departamento, nombre_ocupacion as ocupacion, banco, nombre_sucursal as sucursal_favorita, nombre_cat as categoria_favorita \n" +
@@ -92,12 +189,72 @@ public class ReportesSceneController {
                             "FROM cliente c INNER JOIN categoria_producto k ON (c.id_categoria_favorita = k.id_categoria)\n" +
                             "GROUP BY nombre_cat ";
             rs = serverSQL.executeQuery(query);
+
+
+            try {
+                DefaultCategoryDataset dataset = new DefaultCategoryDataset( );
+                while (rs.next()) {
+                    String nombre = rs.getString(1);
+
+                    dataset.addValue(rs.getDouble(2),nombre, nombre);
+                }
+
+                JFreeChart barChart = ChartFactory.createBarChart3D (
+                        "Edad promedio seegun categoria",
+                        "Categorias", "Edades",
+                        dataset, PlotOrientation.VERTICAL,
+                        true, true, false);
+                int width = 1024;    /* Width of the image */
+                int height = 480;   /* Height of the image */
+                String path1 = System.getProperty("user.dir") + "/resources/edades_categoria.png";
+                path1 = path1.replace("\\", "/");
+                File BarChart = new File( path1 );
+                ChartUtilities.saveChartAsJPEG( BarChart , barChart , width , height );
+
+            }
+            catch(Exception e){
+                System.out.println(e);
+            }
+
+
+
         }
-        else{
+        else if (numero == 9){
+
             String query =  "SELECT nombre_sucursal as sucursal, count (*) as clientes\n" +
                             "FROM cliente c INNER JOIN sucursal k ON (c.sucursal_favorita = k.id_sucursal)\n" +
                             "GROUP BY nombre_sucursal";
+
             rs = serverSQL.executeQuery(query);
+
+            DefaultPieDataset dataset = new DefaultPieDataset( );
+            try {
+                while( rs.next( ) ) {
+                    dataset.setValue(
+                            rs.getString( 1 ) ,
+                            Double.parseDouble( rs.getString( 2 )));
+                }
+                JFreeChart chart = ChartFactory.createPieChart(
+                        "Ditribucion de los usuarios la tienda",   // chart title
+                        dataset,          // data
+                        true,             // include legend
+                        true,
+                        false );
+
+                int width = 560;    /* Width of the image */
+                int height = 370;   /* Height of the image */
+
+                String path1 = System.getProperty("user.dir") + "/resources/usuarios_sucursal.png";
+                path1 = path1.replace("\\", "/");
+                File pieChart = new File( path1 );
+                ChartUtilities.saveChartAsJPEG( pieChart , chart , width , height );
+            }
+            catch(Exception e){
+                System.out.println(e);
+            }
+
+
+
         }
 
 
