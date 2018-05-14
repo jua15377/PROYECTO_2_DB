@@ -224,28 +224,31 @@ public class verClienteSceneController implements Initializable{
 
                 //poner lo de los tweets
                 //pomiendo info en los labels
-                if(!tfTwitterUsername.getText().isEmpty()) {
-                    ServerMongo serverMongo = new ServerMongo();
-                    Document doc = serverMongo.findADocument("_id",tfTwitterUsername.getText());
+                try {
+                    if (!tfTwitterUsername.getText().isEmpty()) {
+                        ServerMongo serverMongo = new ServerMongo();
+                        Document doc = serverMongo.findADocument("_id", tfTwitterUsername.getText());
 
-                    twitterName.setText(doc.get("name").toString());
-                    twitter_descripcion.setText(doc.get("descripcion").toString());
-                    twitter_locacion.setText(doc.get("locacion").toString());
-                    cant_followers.setText(doc.get("seguidores").toString());
-                    cant_tweets.setText(doc.get("cantidadTweets").toString());
+                        twitterName.setText(doc.get("name").toString());
+                        twitter_descripcion.setText(doc.get("descripcion").toString());
+                        twitter_locacion.setText(doc.get("locacion").toString());
+                        cant_followers.setText(doc.get("seguidores").toString());
+                        cant_tweets.setText(doc.get("cantidadTweets").toString());
 
-                    ArrayList<Document> tweets = (ArrayList<Document>) doc.get("tweets");
+                        ArrayList<Document> tweets = (ArrayList<Document>) doc.get("tweets");
 
-                    tweetsList.getItems().clear();
-                    for (Document d: tweets){
-                        //System.out.println(d.get("texto").toString());
-                        //System.out.println(d.get("fecha").toString());
-                        String s = d.get("fecha").toString() + d.get("texto").toString();
-                        tweetsList.getItems().add(s);
+                        tweetsList.getItems().clear();
+                        for (Document d : tweets) {
+                            String s = d.get("fecha").toString() + d.get("texto").toString();
+                            tweetsList.getItems().add(s);
+
+                        }
+
 
                     }
-
-
+                }
+                catch (NullPointerException np){
+                    System.out.println(np);
                 }
 
                 scrollPaneFields.setVisible(true);
@@ -568,7 +571,23 @@ public class verClienteSceneController implements Initializable{
      */
     @FXML
     void buscarTweetsButtonAction(){
+        //solucion temporal
+        if(!tfTwitterUsername.getText().isEmpty()) {
+            ServerMongo serverMongo = new ServerMongo();
+            Document doc = serverMongo.findADocument("_id", tfTwitterUsername.getText());
+            ArrayList<Document> tweets = (ArrayList<Document>) doc.get("tweets");
+            String keyword = tfBuscarTweets.getText();
+            tweetsList.getItems().clear();
+            for (Document d : tweets) {
+                //System.out.println(d.get("texto").toString());
+                //System.out.println(d.get("fecha").toString());
+                if (d.get("texto").toString().contains(keyword)) {
+                    String s = d.get("fecha").toString() + d.get("texto").toString();
+                    tweetsList.getItems().add(s);
+                }
 
+            }
+        }
     }
 
 

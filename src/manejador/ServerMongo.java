@@ -1,15 +1,17 @@
 package manejador;
 
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBCollection;
-import com.mongodb.DBCursor;
-import com.mongodb.MongoClient;
+import com.mongodb.*;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.Indexes;
 import org.bson.Document;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -27,7 +29,7 @@ public class ServerMongo {
         try {
             this.mongoClient = new MongoClient(credenciales.getConnectionString());
             this.database = mongoClient.getDatabase("crm_compu_twitter");
-            collection = database.getCollection("test");
+            collection = database.getCollection("twitter");
 
         }
         catch (Exception e){
@@ -64,4 +66,36 @@ public class ServerMongo {
     public void insertOn(Document doc){
         collection.insertOne(doc);
     }
+
+
+    public void fullTextSearch(String query, boolean caseSensitive, boolean diacriticSensitive) {
+
+
+        try {
+            MongoCursor<Document> cursor = null;
+            cursor = collection.find(new Document("$text", new Document("$search", query).append("$caseSensitive", new Boolean(caseSensitive)).append("$diacriticSensitive", new Boolean(diacriticSensitive)))).iterator();
+
+            while (cursor.hasNext()) {
+                Document article = cursor.next();
+                System.out.println(article);
+            }
+
+            cursor.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            mongoClient.close();
+        }
+
+    }
+
+    public void fulltweetSearchTwo(String userName){
+//        BasicDBObject query = new BasicDBObject(new BasicDBObject("$match", new BasicDBObject("_id", userName)));
+//        query.append(new BasicDBObject("$unwind", "$tweets"));
+//
+//        System.out.println(query);
+
+    }
+
 }
